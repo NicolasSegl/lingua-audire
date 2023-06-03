@@ -1,0 +1,34 @@
+body {
+    background-color: white;
+}
+
+.button {
+    padding: 1em;
+    border: solid 1px;
+    border-radius: 10% / 50%;
+}
+
+.hidden {
+    display: none;
+}
+
+#file-upload-header {
+    margin-top: 10%;
+}
+
+#game-container {
+    height: 100%;
+    margin-top: 10%;
+
+    display: flex;
+    justify-content: center;
+}
+
+#menu-container {
+    width: 33%;
+}
+
+#audio-player {
+    display: flex;
+    align-items: center;
+}
