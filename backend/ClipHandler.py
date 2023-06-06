@@ -1,5 +1,7 @@
 from flask import jsonify
 from flask_restful import Resource, reqparse
+
+from backend.constants import SQL_PATH_INDEX, SQL_SENTENCE_INDEX
 from backend.database import db
 
 import base64 # for encoding the audio data so the frontend can handle it
@@ -11,9 +13,9 @@ class ClipHandler(Resource):
 
 		# query the database for a random clip
 		cursor = db.connection.cursor()
-		cursor.execute('''SELECT * FROM table_name''')
+		cursor.execute('''SELECT * FROM clip''')
 		rv = cursor.fetchall()
-		fileName = rv[random.randint(0, len(rv))][1]
+		fileName = rv[random.randint(0, len(rv))][SQL_PATH_INDEX]
 		cursor.close()
 
 		# using the clip's filename, send the file to the user

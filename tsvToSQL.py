@@ -1,14 +1,12 @@
 import sys
 
+from backend.constants import TSV_PATH_INDEX, TSV_SENTENCE_INDEX
+
 if (len(sys.argv) != 3):
     print("Usage: python tsvToSQL.py <TSV file name> <SQL file name>")
     exit()
 
 TABLE_NAME = "clip"
-
-# the indices of the data in the .tsv file
-PATH_INDEX = 1
-SENTENCE_INDEX = 2
 
 # get the tsv and sql file names from the command line arguments
 tsvFileName = sys.argv[1]
@@ -37,7 +35,7 @@ sentence VARCHAR(100)
         columns = line.rstrip().split('\t')
 
         sqlFile.write(f"INSERT INTO {TABLE_NAME}(path, sentence)\n")
-        sqlFile.write(f"VALUES(\"{columns[PATH_INDEX]}\", \"{columns[SENTENCE_INDEX]}\");\n\n")
+        sqlFile.write(f"VALUES(\"{columns[TSV_PATH_INDEX]}\", \"{columns[TSV_SENTENCE_INDEX]}\");\n\n")
 
         line = tsvFile.readline()
 
