@@ -1,4 +1,5 @@
 import sys
+import codecs
 
 from backend.constants import TSV_PATH_INDEX, TSV_SENTENCE_INDEX
 
@@ -15,7 +16,7 @@ sqlFileName = sys.argv[2]
 with open(tsvFileName, "r", encoding="utf-8") as tsvFile:
     # create (if it doesn't already exist) a SQL file with the name as given by the command line arguments
     # this file will be filled with all of our SQL commands
-    sqlFile = open(sqlFileName, "w")
+    sqlFile = codecs.open(sqlFileName, "w", "utf-8")
 
     # the very first line of the .tsv file will detail all of the columns of our table
     # since we already know what the columns will be, we can skip the first line
