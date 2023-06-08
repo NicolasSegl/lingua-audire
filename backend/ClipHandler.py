@@ -13,7 +13,7 @@ class ClipHandler(Resource):
 
 		# query the database for a random clip
 		cursor = db.connection.cursor()
-		cursor.execute('''SELECT * FROM clip''')
+		cursor.execute("SELECT * FROM clip WHERE clip.difficulty < 10")
 		rv = cursor.fetchall()
 		fileName = rv[random.randint(0, len(rv))][SQL_PATH_INDEX]
 		cursor.close()
