@@ -26,9 +26,16 @@ body {
 
 #menu-container {
     width: 33%;
+    display: flex;
+
+    flex-direction: column;
 }
 
 #audio-player {
     display: flex;
     align-items: center;
+}
+
+#next-button {
+    margin-top: 5%;
 }

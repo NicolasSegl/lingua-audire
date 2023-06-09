@@ -15,11 +15,13 @@ class ClipHandler(Resource):
 		cursor = db.connection.cursor()
 		cursor.execute("SELECT * FROM clip WHERE clip.difficulty < 10")
 		rv = cursor.fetchall()
-		fileName = rv[random.randint(0, len(rv))][SQL_PATH_INDEX]
+		index = random.randint(0, len(rv))
+		fileName = rv[index][SQL_PATH_INDEX]
+		sentence = rv[index][SQL_SENTENCE_INDEX]
 		cursor.close()
 
 		# using the clip's filename, send the file to the user
 		with open("da/clips/" + fileName, "rb") as file:
 			# encode the file as base64 so that the javascript can play the file as audio
-			response = jsonify({"audioData": base64.b64encode(file.read()).decode("utf-8")})
+			response = jsonify({"audioData": base64.b64encode(file.read()).decode("utf-8"), "sentence": sentence})
 			return response
