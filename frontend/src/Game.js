@@ -7,14 +7,70 @@ import './Game.css'
 // mui components
 import Button from "@mui/material/Button"
 import IconButton from '@mui/material/IconButton'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
 import Slider from '@mui/material/Slider'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 
 // mui icons
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import PlayArrow from '@mui/icons-material/PlayArrow'
 import VolumeDown from '@mui/icons-material/VolumeUp'
 import VolumeUp from '@mui/icons-material/VolumeDown'
+
+let currentDifficulty = 2;
+
+function DifficultyMenu() {
+
+    const selectedItemSX = {
+        backgroundColor: "#3f51b5",
+        color: "white",
+        "&:hover": {
+            color: "white",
+            backgroundColor: "#3f51b5"
+        }
+    }
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = (event) => {
+        currentDifficulty = Number(event.target.innerText);
+        setAnchorEl(null);
+    };
+
+    return (
+        <div>
+            <Button
+                id="basic-button"
+                aria-controls={open ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}
+                endIcon={<KeyboardArrowDownIcon />}
+            >
+                Difficulty
+            </Button>
+            <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                // MenuListProps={{
+                // 'aria-labelledby': 'basic-button',
+                // }}
+            >
+                <MenuItem sx={currentDifficulty === 1 ? selectedItemSX : {}} onClick={handleClose}>1</MenuItem>
+                <MenuItem sx={currentDifficulty === 2 ? selectedItemSX : {}} onClick={handleClose}>2</MenuItem>
+                <MenuItem sx={currentDifficulty === 3 ? selectedItemSX : {}} onClick={handleClose}>3</MenuItem>
+            </Menu>
+        </div>
+  );
+}
 
 let currentAudioClip = new Audio();
 let currentSentence  = "";
@@ -23,7 +79,7 @@ let currentSentence  = "";
 // stores the retrieved data in the currentAudioClip and currentSentence variables
 function b64GetClip() {
     // in the future we will pass parameters to the GET request such as: /clips?lang='danish'&difficulty='5'
-    axios.get('http://localhost:5000/danish').then(response => {
+    axios.get('http://localhost:5000/danish', { params: { difficulty: currentDifficulty} }).then(response => {
         currentAudioClip = new Audio("data:audio/mp3;base64," + response.data.audioData);
 
         // strip the sentence of all punctuation and capitlization, so that we can easily compare the user's answer with the sentence
@@ -91,6 +147,15 @@ function Game() {
                     onChange={handleTextInput}
                     disabled={nextButtonVisible && "disabled"}
                 />
+
+                <Stack direction="row">
+                    <DifficultyMenu />
+                    {/* <Button>Skip</Button> */}
+                    <Menu>
+                        {/* <MenuItem></MenuItem> */}
+                    </Menu>
+                </Stack>
+
                 {
                 nextButtonVisible &&
                 <Button onClick={handleNextButtonClick} id="next-button" variant="contained" color="success">Next</Button>
