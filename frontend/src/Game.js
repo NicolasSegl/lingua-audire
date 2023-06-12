@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 // css
 import './Game.css'
@@ -7,148 +7,63 @@ import './Game.css'
 // mui components
 import Button from "@mui/material/Button"
 import IconButton from '@mui/material/IconButton'
-import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
 import Slider from '@mui/material/Slider'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 
 // mui icons
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import PlayArrow from '@mui/icons-material/PlayArrow'
 import VolumeDown from '@mui/icons-material/VolumeUp'
 import VolumeUp from '@mui/icons-material/VolumeDown'
 
-// for making custom mui themes
-import { createTheme, ThemeProvider } from '@mui/material/styles'
-
-const theme = createTheme({
-    status: {
-        danger: '#e53e3e',
-    },
-    palette: {
-        primary: {
-            main: '#f44336',
-            darker: '#053e85',
-      }
-}});
-
-let currentDifficulty = 2;
-
-function DifficultyMenu() {
-
-    const selectedItemSX = {
-        backgroundColor: "#3f51b5",
-        color: "white",
-        "&:hover": {
-            color: "white",
-            backgroundColor: "#3f51b5"
-        }
-    }
-
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
-
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = (event) => {
-        currentDifficulty = Number(event.target.innerText);
-        setAnchorEl(null);
-    };
-
-    return (
-        <div>
-            <Button
-                id="basic-button"
-                aria-controls={open ? 'basic-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick}
-                endIcon={<KeyboardArrowDownIcon />}
-            >
-                Difficulty
-            </Button>
-            <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                // MenuListProps={{
-                // 'aria-labelledby': 'basic-button',
-                // }}
-            >
-                <MenuItem sx={currentDifficulty === 1 ? selectedItemSX : {}} onClick={handleClose}>1</MenuItem>
-                <MenuItem sx={currentDifficulty === 2 ? selectedItemSX : {}} onClick={handleClose}>2</MenuItem>
-                <MenuItem sx={currentDifficulty === 3 ? selectedItemSX : {}} onClick={handleClose}>3</MenuItem>
-            </Menu>
-        </div>
-  );
-}
-
-function SkipButton() {
-    function handleClick() {
-        b64GetClip();
-    }
-
-    return (
-        <ThemeProvider theme={theme}>
-            <Button onClick={handleClick} variant="contained">
-                Skip
-            </Button>
-        </ThemeProvider>
-    );
-}
-
-let currentAudioClip = new Audio();
-let currentSentence  = "";
-
-// performs a GET call to the server for a clip
-// stores the retrieved data in the currentAudioClip and currentSentence variables
-function b64GetClip() {
-    // in the future we will pass parameters to the GET request such as: /clips?lang='danish'&difficulty='5'
-    axios.get('http://localhost:5000/danish', { params: { difficulty: currentDifficulty} }).then(response => {
-        currentAudioClip = new Audio("data:audio/mp3;base64," + response.data.audioData);
-
-        // strip the sentence of all punctuation and capitlization, so that we can easily compare the user's answer with the sentence
-        currentSentence = response.data.sentence.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
-    }).catch(error => {
-      console.log(error)
-    });
-}
-
-// immediately fetch a clip from the server upon the page loading
-window.addEventListener("load", () =>
-{
-    b64GetClip();
-});
+// custom components
+import DifficultyMenu from './components/DifficultyMenu'
+import SkipButton from './components/SkipButton'
 
 // the root component of the Game page
-function Game() {
+export default function Game() {
     const [volume, setVolume] = useState(50);
     const [nextButtonVisible, setNextButtonVisible] = useState(false);
+    const [currentDifficulty, setCurrentDifficulty] = useState(2);
+
+    let currentAudioClip  = new Audio();
+    let currentSentence   = "";
+
+    // performs a GET call to the server for a clip
+    function getClip() {
+        axios.get('http://localhost:5000/danish', { params: { difficulty: currentDifficulty} }).then(response => {
+            // instantiate an audio object using the base64 encoded string of the audio file's raw data as retrieved from the server
+            currentAudioClip = new Audio("data:audio/mp3;base64," + response.data.audioData);
+
+            // strip the sentence of all punctuation and capitlization, so that we can easily compare the user's answer with the sentence
+            currentSentence = response.data.sentence.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+
+        }).catch(error => {
+        console.log(error)
+        });
+    }
+
+    useEffect(() => getClip(), []);
 
     function handleVolumeChange(event, newVolume) {
         setVolume(newVolume);
     }
 
     function handlePlayButtonClick() {
-         currentAudioClip.play();
+        currentAudioClip.play();
     }
 
     function handleTextInput(event)
     {
         let userAnswer = event.target.value.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/, "");
-
-        if (userAnswer == currentSentence)
+        if (userAnswer === currentSentence)
         {
-            // have a next button appear, and disallow the user from further editing the answer
             setNextButtonVisible(true);
         }
     }
 
     function handleNextButtonClick() {
-        b64GetClip();
+        getClip(currentDifficulty);
         setNextButtonVisible(false);
 
         // reset the text in the text field
@@ -177,8 +92,8 @@ function Game() {
                 />
 
                 <Stack direction="row" id="difficulty-skip-stack">
-                    <DifficultyMenu />
-                    {!nextButtonVisible && <SkipButton />}
+                    <DifficultyMenu parentHandleClose={(event) => setCurrentDifficulty(Number(event.target.innerText))} currentDifficulty={currentDifficulty}/>
+                    {!nextButtonVisible && <SkipButton parentHandleClick={() => getClip(currentDifficulty)}/>}
                 </Stack>
 
                 {
@@ -189,5 +104,3 @@ function Game() {
         </div>
     );
 };
-
-export default Game;
