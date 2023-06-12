@@ -39,3 +39,8 @@ body {
 #next-button {
     margin-top: 5%;
 }
+
+#difficulty-skip-stack {
+    display: flex;
+    justify-content: space-between;
+}

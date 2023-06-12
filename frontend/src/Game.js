@@ -19,6 +19,20 @@ import PlayArrow from '@mui/icons-material/PlayArrow'
 import VolumeDown from '@mui/icons-material/VolumeUp'
 import VolumeUp from '@mui/icons-material/VolumeDown'
 
+// for making custom mui themes
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+
+const theme = createTheme({
+    status: {
+        danger: '#e53e3e',
+    },
+    palette: {
+        primary: {
+            main: '#f44336',
+            darker: '#053e85',
+      }
+}});
+
 let currentDifficulty = 2;
 
 function DifficultyMenu() {
@@ -70,6 +84,20 @@ function DifficultyMenu() {
             </Menu>
         </div>
   );
+}
+
+function SkipButton() {
+    function handleClick() {
+        b64GetClip();
+    }
+
+    return (
+        <ThemeProvider theme={theme}>
+            <Button onClick={handleClick} variant="contained">
+                Skip
+            </Button>
+        </ThemeProvider>
+    );
 }
 
 let currentAudioClip = new Audio();
@@ -148,12 +176,9 @@ function Game() {
                     disabled={nextButtonVisible && "disabled"}
                 />
 
-                <Stack direction="row">
+                <Stack direction="row" id="difficulty-skip-stack">
                     <DifficultyMenu />
-                    {/* <Button>Skip</Button> */}
-                    <Menu>
-                        {/* <MenuItem></MenuItem> */}
-                    </Menu>
+                    {!nextButtonVisible && <SkipButton />}
                 </Stack>
 
                 {
