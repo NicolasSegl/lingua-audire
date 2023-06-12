@@ -83,7 +83,7 @@ function b64GetClip() {
         currentAudioClip = new Audio("data:audio/mp3;base64," + response.data.audioData);
 
         // strip the sentence of all punctuation and capitlization, so that we can easily compare the user's answer with the sentence
-        currentSentence = response.data.sentence.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/, "");
+        currentSentence = response.data.sentence.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
     }).catch(error => {
       console.log(error)
     });
