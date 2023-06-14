@@ -13,6 +13,7 @@ import TextField from '@mui/material/TextField'
 
 // mui icons
 import PlayArrow from '@mui/icons-material/PlayArrow'
+import SpeedIcon from '@mui/icons-material/Speed';
 import VolumeDown from '@mui/icons-material/VolumeUp'
 import VolumeUp from '@mui/icons-material/VolumeDown'
 
@@ -26,6 +27,7 @@ let currentSentence  = "";
 // the root component of the Game page
 export default function Game() {
     const [volume, setVolume] = useState(50);
+    const [playbackSpeed, setPlaybackSpeed] = useState(1);
     const [nextButtonVisible, setNextButtonVisible] = useState(false);
     const [currentDifficulty, setCurrentDifficulty] = useState(2);
 
@@ -37,9 +39,6 @@ export default function Game() {
 
             // strip the sentence of all punctuation and capitlization, so that we can easily compare the user's answer with the sentence
             currentSentence = response.data.sentence.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
-
-            currentAudioClip.volume = 0.01;
-
         }).catch(error => {
         console.log(error)
         });
@@ -51,6 +50,11 @@ export default function Game() {
     function handleVolumeChange(event, newVolume) {
         setVolume(newVolume);
         currentAudioClip.volume = newVolume / 100;
+    }
+
+    function handlePlaybackSpeedChange(event, newPlaybackSpeed) {
+        setPlaybackSpeed(newPlaybackSpeed);
+        currentAudioClip.playbackRate = newPlaybackSpeed;
     }
 
     function handlePlayButtonClick() {
@@ -82,9 +86,11 @@ export default function Game() {
                         <PlayArrow />
                     </IconButton>
 
+                    <SpeedIcon />
+                    <Slider valueLabelDisplay="auto" min={0.25} max={2.0} step={0.25} value={playbackSpeed} onChange={handlePlaybackSpeedChange}/>
+
                     <VolumeUp />
-                    <Slider value={volume} onChange={handleVolumeChange}/>
-                    <VolumeDown />
+                    <Slider valueLabelDisplay="auto" value={volume} onChange={handleVolumeChange}/>
                 </Stack>
                 <TextField /*disabled={outlineColour === "success" && "disabled"}*/ 
                     multiline 
