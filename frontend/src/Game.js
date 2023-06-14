@@ -38,15 +38,19 @@ export default function Game() {
             // strip the sentence of all punctuation and capitlization, so that we can easily compare the user's answer with the sentence
             currentSentence = response.data.sentence.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
 
+            currentAudioClip.volume = 0.01;
+
         }).catch(error => {
         console.log(error)
         });
     }
 
+    // immediately get a clip from the server upon the game interface loading
     useEffect(() => getClip(), []);
 
     function handleVolumeChange(event, newVolume) {
         setVolume(newVolume);
+        currentAudioClip.volume = newVolume / 100;
     }
 
     function handlePlayButtonClick() {
@@ -56,6 +60,7 @@ export default function Game() {
     function handleTextInput(event)
     {
         let userAnswer = event.target.value.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/, "");
+
         if (userAnswer === currentSentence)
         {
             setNextButtonVisible(true);
