@@ -20,14 +20,14 @@ import VolumeUp from '@mui/icons-material/VolumeDown'
 import DifficultyMenu from './components/DifficultyMenu'
 import SkipButton from './components/SkipButton'
 
+let currentAudioClip = new Audio();
+let currentSentence  = "";
+
 // the root component of the Game page
 export default function Game() {
     const [volume, setVolume] = useState(50);
     const [nextButtonVisible, setNextButtonVisible] = useState(false);
     const [currentDifficulty, setCurrentDifficulty] = useState(2);
-
-    let currentAudioClip  = new Audio();
-    let currentSentence   = "";
 
     // performs a GET call to the server for a clip
     function getClip() {
