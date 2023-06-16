@@ -105,7 +105,7 @@ export default function Game() {
             let userAnswer  = answerInput.value.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
             answerInput.value = "";
 
-            if (calcLevDistance(userAnswer, currentSentence) <= currentSentence.length / 10)
+            if (calcLevDistance(userAnswer, currentSentence) <= currentSentence.length / 15)
             {
                 setSubmitColour("success");
             }
