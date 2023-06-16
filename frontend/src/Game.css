@@ -1,5 +1,5 @@
 body {
-    background-color: white;
+    background-color: whitesmoke;
 }
 
 .button {
@@ -41,6 +41,9 @@ body {
 }
 
 #difficulty-skip-stack {
+    margin-top: 5%;
+    margin-left: 5%;
+    margin-right: 5%;
     display: flex;
     justify-content: space-between;
 }
