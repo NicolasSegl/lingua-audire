@@ -10,15 +10,12 @@ import IconButton from '@mui/material/IconButton'
 import Slider from '@mui/material/Slider'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
+import Tooltip from '@mui/material/Tooltip'
 
 // mui icons
 import PlayArrow from '@mui/icons-material/PlayArrow'
 import SpeedIcon from '@mui/icons-material/Speed';
-import VolumeDown from '@mui/icons-material/VolumeUp'
 import VolumeUp from '@mui/icons-material/VolumeDown'
-
-// custom components
-import SkipButton from './components/SkipButton'
 
 // computes the edit distance between the two given strings (a, b)
 // taken from https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#JavaScript,
@@ -133,14 +130,20 @@ export default function Game() {
         <div id="game-container">
             <div id="menu-container">
                 <Stack spacing={1.5} direction="row" id="audio-player">
-                    <IconButton onClick={handlePlayButtonClick}>
-                        <PlayArrow />
-                    </IconButton>
+                    <Tooltip title="Play Audio" placement="top">
+                        <IconButton onClick={handlePlayButtonClick}>
+                            <PlayArrow />
+                        </IconButton>
+                    </Tooltip>
 
-                    <SpeedIcon />
+                    <Tooltip title="Playback Speed" placement="top">
+                        <SpeedIcon />
+                    </Tooltip>
                     <Slider valueLabelDisplay="auto" min={0.25} max={2.0} step={0.25} value={playbackSpeed} onChange={handlePlaybackSpeedChange}/>
 
-                    <VolumeUp />
+                    <Tooltip title="Volume" placement="top">
+                        <VolumeUp />
+                    </Tooltip>
                     <Slider valueLabelDisplay="auto" value={volume} onChange={handleVolumeChange}/>
                 </Stack>
                 <TextField
@@ -153,12 +156,12 @@ export default function Game() {
                 />
 
                 {submitted && 
-                <p>{submitColour === "success" ? "Correct!" : "Incorrect, the sentence was: " + currentSentencePunctuation}</p>
+                <p id="correct-sentence">{submitColour === "success" ? "Correct!" : "Incorrect, the sentence was: " + currentSentencePunctuation}</p>
                 }
 
                 <Stack direction="row" id="difficulty-skip-stack">
-                    <Button variant="outlined" onClick={handleSkipButtonClick}>Skip</Button>
-                    <Button color={submitColour} onClick={handleCheckButtonClick} variant="outlined">{submitted ? "Next" : "Check"}</Button>
+                    <Button variant="outlined" onClick={handleSkipButtonClick} sx={{fontSize: 20}}>Skip</Button>
+                    <Button color={submitColour} onClick={handleCheckButtonClick} variant="outlined" sx={{fontSize: 20}}>{submitted ? "Next" : "Check"}</Button>
                 </Stack>
             </div>
         </div>
