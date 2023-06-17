@@ -58,7 +58,7 @@ export default function Home() {
 			    <h3 id="subheader">Designed to improve language listening skills, Lingua Audire provides a way for users to audibly input in their target language.</h3>
             </div>
 
-            <Stack direction="row" spacing={5}>
+            <Stack id="start-game-stack" direction="row" spacing={5}>
                 <LanguageSelect />
                 <Button variant="contained" onClick={() => window.location.href='/game/' + redirectLanguage}>Start Game</Button>
             </Stack>

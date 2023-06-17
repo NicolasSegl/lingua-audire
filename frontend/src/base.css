@@ -35,6 +35,7 @@ code {
 }
 
 #Footer * {
+	font-size: 14px;
 	width: 33%;
 	margin-bottom: 3%;
 	color: rgb(182, 182, 182);

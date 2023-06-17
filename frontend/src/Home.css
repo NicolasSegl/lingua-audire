@@ -17,3 +17,9 @@
     font-size: 24px;
     width: 50%;
 }
+
+#start-game-stack {
+    margin-top: 10%;
+    display: flex;
+    justify-content: center;
+}
