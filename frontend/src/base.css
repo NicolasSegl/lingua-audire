@@ -12,3 +12,20 @@ code {
   	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     	monospace;
 }
+
+#NavBar {
+	display: flex;
+	padding: 1%;
+}
+
+#NavBar * {
+	font-weight: 600;
+	font-size: 20px;
+	color: rgb(37, 37, 37);
+
+
+}
+
+a {
+	text-decoration: none;
+}
