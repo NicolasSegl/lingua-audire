@@ -15,6 +15,15 @@ function NavBar() {
 	);
 }
 
+function Footer() {
+	return (
+		<div id="Footer">
+			<p>A feature you would like added to the site? A bug you would like to report? Send an email to: linguaaudire@gmail.com</p>
+			<p>Any support for the upkeep and further development of the site is greatly appreciated. If you would like to make a small donation, you can do so at: <a href="https://www.buymeacoffee.com/linguaaudire">https://www.buymeacoffee.com/linguaaudire</a></p>
+		</div>
+	);
+}
+
 function Main() {
 	return (
 		<Routes>
@@ -29,6 +38,7 @@ function App() {
 		<div id="App">
 			<NavBar />
 			<Main />
+			<Footer></Footer>
 		</div>
 	);
 }
