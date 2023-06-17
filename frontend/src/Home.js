@@ -15,6 +15,7 @@ import './Home.css'
 // an array with all the supported languages
 const SUPPORTED_LANGUAGES = [
     "Dansk",
+    "Deutsch",
 ];
 
 let redirectLanguage = "";

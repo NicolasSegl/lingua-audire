@@ -31,7 +31,7 @@ class ClipHandler(Resource):
 		cursor.close()
 
 		# using the clip's filename, send the file to the user
-		with open("da/clips/" + fileName, "rb") as file:
+		with open(f"{language}/clips/" + fileName, "rb") as file:
 			# encode the file as base64 so that the javascript can play the file as audio
 			response = jsonify({"audioData": base64.b64encode(file.read()).decode("utf-8"), "sentence": sentence})
 			return response

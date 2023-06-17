@@ -6,7 +6,7 @@ import codecs
 from backend.constants import TSV_PATH_INDEX, TSV_SENTENCE_INDEX
 
 # constants for calculating word difficulty
-VOWELS = "aeiouyæøå"
+VOWELS = "aeiouyæøåäöü"
 HARD_WORD_VALUE = 2
 EASY_WORD_VALUE = 1
 
@@ -59,17 +59,7 @@ with open(tsvFileName, "r", encoding="utf-8") as tsvFile:
     # the very first line of the .tsv file will detail all of the columns of our table
     # since we already know what the columns will be, we can skip the first line
     line = tsvFile.readline()
-    line = tsvFile.readline()
-
-    # create the clip table at the start of the SQL file
-    sqlFile.write(f"""/* CREATE TABLE */
-CREATE TABLE {TABLE_NAME}(
-path VARCHAR(100),
-sentence VARCHAR(100),
-difficulty SMALLINT(100),
-language VARCHAR(100)
-);\n
-""")
+    line = tsvFile.readline().replace('\"', "")
 
     while line:
         # get all of the columns of the .tsv file into a list
@@ -78,6 +68,6 @@ language VARCHAR(100)
         sqlFile.write(f"INSERT INTO {TABLE_NAME}(path, sentence, difficulty, language)\n")
         sqlFile.write(f"VALUES(\"{columns[TSV_PATH_INDEX]}\", \"{columns[TSV_SENTENCE_INDEX]}\", {calcDifficulty(columns[TSV_SENTENCE_INDEX])}, \"{language}\");\n\n")
 
-        line = tsvFile.readline()
+        line = tsvFile.readline().replace('\"', "")
 
     sqlFile.close()
