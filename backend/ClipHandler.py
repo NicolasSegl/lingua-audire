@@ -13,10 +13,17 @@ class ClipHandler(Resource):
 
 		# get the difficulty parameter passed in by the client
 		difficulty = int(request.args["difficulty"])
+		language   = request.args["language"]
 
 		# query the database for a random clip
 		cursor = db.connection.cursor()
-		cursor.execute(f"SELECT * FROM clip WHERE clip.difficulty < {difficulty * 10} AND clip.difficulty > {difficulty * 10 - 10}")
+
+		try:
+			cursor.execute(f"SELECT * FROM clip WHERE clip.language = \"{language}\" AND clip.difficulty < {difficulty * 10} AND clip.difficulty > {difficulty * 10 - 10}")
+		except:
+			cursor.close()
+			return
+		
 		rv = cursor.fetchall()
 		index = random.randint(0, len(rv) - 1)
 		fileName = rv[index][SQL_PATH_INDEX]

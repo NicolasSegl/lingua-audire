@@ -1,0 +1,19 @@
+#header {
+    font-size: 72px;
+}
+
+#header, #subheader {
+    text-align: center;
+    color: rgb(37, 37, 37);
+}
+
+#subheader-container {
+    display: flex;
+    justify-content: center;
+}
+
+#subheader {
+    font-weight: normal;
+    font-size: 24px;
+    width: 50%;
+}

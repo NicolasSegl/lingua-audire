@@ -23,7 +23,7 @@ def create_app():
     api = Api(app)
 
     # setup the REST endpoints
-    api.add_resource(ClipHandler, "/danish")
+    api.add_resource(ClipHandler, "/getClip")
 
     # initialize the app's config
     app.config.from_object(devConfig)

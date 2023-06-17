@@ -17,6 +17,10 @@ import PlayArrow from '@mui/icons-material/PlayArrow'
 import SpeedIcon from '@mui/icons-material/Speed';
 import VolumeUp from '@mui/icons-material/VolumeDown'
 
+// used for sending GET requests to the server
+// the first 6 charactrs of the path name will be '/game/'
+const SELECTED_LANGUAGE = window.location.pathname.substring(6).toLowerCase();
+
 // computes the edit distance between the two given strings (a, b)
 // taken from https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#JavaScript,
 // as my crude recursive implentation was far too slow to be practical
@@ -68,7 +72,7 @@ export default function Game() {
 
     // performs a GET call to the server for a clip
     function getClip() {
-        axios.get('http://localhost:5000/danish', { params: { difficulty: currentDifficulty} }).then(response => {
+        axios.get('http://localhost:5000/getClip', { params: { language: SELECTED_LANGUAGE, difficulty: currentDifficulty} }).then(response => {
             // instantiate an audio object using the base64 encoded string of the audio file's raw data as retrieved from the server
             currentAudioClip = new Audio("data:audio/mp3;base64," + response.data.audioData);
 

@@ -42,13 +42,14 @@ def calcDifficulty(sentence):
 
     return difficulty
 
-if (len(sys.argv) != 3):
-    print("Usage: python tsvToSQL.py <TSV file name> <SQL file name>")
+if (len(sys.argv) != 4):
+    print("Usage: python tsvToSQL.py <TSV file name> <SQL file name> <language>")
     exit()
 
 # get the tsv and sql file names from the command line arguments
 tsvFileName = sys.argv[1]
 sqlFileName = sys.argv[2]
+language    = sys.argv[3]
 
 with open(tsvFileName, "r", encoding="utf-8") as tsvFile:
     # create (if it doesn't already exist) a SQL file with the name as given by the command line arguments
@@ -65,7 +66,8 @@ with open(tsvFileName, "r", encoding="utf-8") as tsvFile:
 CREATE TABLE {TABLE_NAME}(
 path VARCHAR(100),
 sentence VARCHAR(100),
-difficulty SMALLINT(100)
+difficulty SMALLINT(100),
+language VARCHAR(100)
 );\n
 """)
 
@@ -73,8 +75,8 @@ difficulty SMALLINT(100)
         # get all of the columns of the .tsv file into a list
         columns = line.rstrip().split('\t')
 
-        sqlFile.write(f"INSERT INTO {TABLE_NAME}(path, sentence, difficulty)\n")
-        sqlFile.write(f"VALUES(\"{columns[TSV_PATH_INDEX]}\", \"{columns[TSV_SENTENCE_INDEX]}\", {calcDifficulty(columns[TSV_SENTENCE_INDEX])});\n\n")
+        sqlFile.write(f"INSERT INTO {TABLE_NAME}(path, sentence, difficulty, language)\n")
+        sqlFile.write(f"VALUES(\"{columns[TSV_PATH_INDEX]}\", \"{columns[TSV_SENTENCE_INDEX]}\", {calcDifficulty(columns[TSV_SENTENCE_INDEX])}, \"{language}\");\n\n")
 
         line = tsvFile.readline()
 
