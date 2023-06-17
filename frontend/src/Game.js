@@ -101,6 +101,17 @@ export default function Game() {
         currentAudioClip.play();
     }
 
+    function prepareClip() {
+        getClip(currentDifficulty);
+        setSubmitted(false);
+
+        // reset the colour of the check/next button
+        setSubmitColour("primary");
+        
+        // reset the text inside the answer textfield
+        document.getElementById("answer-input").value = "";
+    }
+
     function handleCheckButtonClick() {
         if (!submitted) {
             setSubmitted(true);
@@ -118,16 +129,8 @@ export default function Game() {
             }
         }
         else {
-            getClip(currentDifficulty);
-            setSubmitted(false);
-            setSubmitColour("primary");
+            prepareClip();
         }
-    }
-
-    function handleSkipButtonClick() {
-        getClip(currentDifficulty);
-        setSubmitted(false);
-        setSubmitColour("primary");
     }
 
     return (
@@ -164,7 +167,7 @@ export default function Game() {
                 }
 
                 <Stack direction="row" id="difficulty-skip-stack">
-                    <Button variant="outlined" onClick={handleSkipButtonClick} sx={{fontSize: 20}}>Skip</Button>
+                    <Button variant="outlined" onClick={prepareClip} sx={{fontSize: 20}}>Skip</Button>
                     <Button color={submitColour} onClick={handleCheckButtonClick} variant="outlined" sx={{fontSize: 20}}>{submitted ? "Next" : "Check"}</Button>
                 </Stack>
             </div>
