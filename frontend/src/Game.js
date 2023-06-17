@@ -118,7 +118,6 @@ export default function Game() {
 
             let answerInput = document.getElementById("answer-input");
             let userAnswer  = answerInput.value.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
-            answerInput.value = "";
 
             if (calcLevDistance(userAnswer, currentSentence) <= currentSentence.length / 15)
             {
