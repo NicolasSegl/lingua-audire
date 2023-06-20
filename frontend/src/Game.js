@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, startTransition } from 'react'
 
 // css
 import './Game.css'
@@ -13,6 +13,8 @@ import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
 
 // mui icons
+import Favorite from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import PlayArrow from '@mui/icons-material/PlayArrow'
 import SpeedIcon from '@mui/icons-material/Speed';
 import VolumeUp from '@mui/icons-material/VolumeDown'
@@ -20,6 +22,10 @@ import VolumeUp from '@mui/icons-material/VolumeDown'
 // used for sending GET requests to the server
 // the first 6 charactrs of the path name will be '/game/'
 const SELECTED_LANGUAGE = window.location.pathname.substring(6).toLowerCase();
+
+const STARTING_LIVES = 3;
+const STARTING_VOLUME = 50;
+const STARTING_PLAYBACK_SPEED = 1;
 
 // computes the edit distance between the two given strings (a, b)
 // taken from https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#JavaScript,
@@ -56,7 +62,7 @@ function calcLevDistance(a, b) {
     }
   
     return matrix[b.length][a.length];
-  };
+};
 
 let currentAudioClip = new Audio();
 let currentSentence  = "";
@@ -64,11 +70,23 @@ let currentSentencePunctuation = "";
 
 // the root component of the Game page
 export default function Game() {
-    const [volume, setVolume] = useState(50);
-    const [playbackSpeed, setPlaybackSpeed] = useState(1);
+    const [volume, setVolume] = useState(STARTING_VOLUME);
+    const [playbackSpeed, setPlaybackSpeed] = useState(STARTING_PLAYBACK_SPEED);
     const [currentDifficulty, setCurrentDifficulty] = useState(2);
     const [submitted, setSubmitted] = useState(false);
     const [submitColour, setSubmitColour] = useState("primary");
+    const [score, setScore] = useState(0);
+    const [lives, setLives] = useState(STARTING_LIVES);
+
+    function resetGame() {
+        setVolume(STARTING_VOLUME);
+        setPlaybackSpeed(STARTING_PLAYBACK_SPEED);
+        setCurrentDifficulty(2);
+        setSubmitted(false);
+        setSubmitColour("primary");
+        setScore(0);
+        setLives(STARTING_LIVES);
+    }
 
     // performs a GET call to the server for a clip
     function getClip() {
@@ -122,54 +140,92 @@ export default function Game() {
             if (calcLevDistance(userAnswer, currentSentence) <= currentSentence.length / 15)
             {
                 setSubmitColour("success");
+                setScore(score + 1);
             }
             else {
+                setLives(lives - 1);
                 setSubmitColour("error");
             }
         }
         else {
+            // this if statement allows for the user the chance to see their mistake on the final wrong answer for the game
+            // upon clicking next again, the game will be over
+            if (lives == 0) {
+                setLives(lives - 1);
+            }
+
             prepareClip();
         }
     }
 
-    return (
-        <div id="game-container">
-            <div id="menu-container">
-                <Stack spacing={1.5} direction="row" id="audio-player">
-                    <Tooltip title="Play Audio" placement="top">
-                        <IconButton onClick={handlePlayButtonClick}>
-                            <PlayArrow />
-                        </IconButton>
-                    </Tooltip>
+    if (lives >= 0) {
+        return (
+            <div id="game-container">
+                <div id="menu-container">
 
-                    <Tooltip title="Playback Speed" placement="top">
-                        <SpeedIcon />
-                    </Tooltip>
-                    <Slider valueLabelDisplay="auto" min={0.25} max={2.0} step={0.25} value={playbackSpeed} onChange={handlePlaybackSpeedChange}/>
+                    <Stack direction="row" id="stats">
+                        <h3>Score: {score.toString()}</h3>
+                        <div id="hearts">
+                        {Array(lives).fill(0).map(() => {
+                            return <Favorite style={{color: "red"}}/>
+                            })
+                        }
+                        {Array(STARTING_LIVES - lives).fill(0).map(() => {
+                            return <FavoriteBorderIcon style={{color: "red"}} />
+                        })
+                        }
+                        </div>
+                    </Stack>
 
-                    <Tooltip title="Volume" placement="top">
-                        <VolumeUp />
-                    </Tooltip>
-                    <Slider valueLabelDisplay="auto" value={volume} onChange={handleVolumeChange}/>
-                </Stack>
-                <TextField
-                    multiline 
-                    fullWidth 
-                    id="answer-input" 
-                    label="Answer" 
-                    variant="outlined" 
-                    disabled={submitted && "disabled"}
-                />
+                    <Stack spacing={1.5} direction="row" id="audio-player">
+                        <Tooltip title="Play Audio" placement="top">
+                            <IconButton onClick={handlePlayButtonClick}>
+                                <PlayArrow />
+                            </IconButton>
+                        </Tooltip>
 
-                {submitted && 
-                <p id="correct-sentence">{submitColour === "success" ? "Correct!" : "Incorrect, the sentence was: " + currentSentencePunctuation}</p>
-                }
+                        <Tooltip title="Playback Speed" placement="top">
+                            <SpeedIcon />
+                        </Tooltip>
+                        <Slider valueLabelDisplay="auto" min={0.25} max={2.0} step={0.25} value={playbackSpeed} onChange={handlePlaybackSpeedChange}/>
 
-                <Stack direction="row" id="difficulty-skip-stack">
-                    <Button variant="outlined" onClick={prepareClip} sx={{fontSize: 20}}>Skip</Button>
-                    <Button color={submitColour} onClick={handleCheckButtonClick} variant="outlined" sx={{fontSize: 20}}>{submitted ? "Next" : "Check"}</Button>
+                        <Tooltip title="Volume" placement="top">
+                            <VolumeUp />
+                        </Tooltip>
+                        <Slider valueLabelDisplay="auto" value={volume} onChange={handleVolumeChange}/>
+                    </Stack>
+                    <TextField
+                        multiline 
+                        fullWidth 
+                        id="answer-input" 
+                        label="Answer" 
+                        variant="outlined" 
+                        disabled={submitted && "disabled"}
+                    />
+
+                    {submitted && 
+                    <p id="correct-sentence">{submitColour === "success" ? "Correct!" : "Incorrect, the sentence was: " + currentSentencePunctuation}</p>
+                    }
+
+                    <Stack direction="row" id="difficulty-skip-stack">
+                        <Button variant="outlined" onClick={prepareClip} sx={{fontSize: 20}}>Skip</Button>
+                        <Button color={submitColour} onClick={handleCheckButtonClick} variant="outlined" sx={{fontSize: 20}}>{submitted ? "Next" : "Check"}</Button>
+                    </Stack>
+                </div>
+            </div>
+        );
+    }
+    else {
+        return (
+            // this, for instance, could easily be a custom component (only thing to pass in would be score? and resetGame?)
+            <div id="game-over-menu">
+                <h1 id="game-over-text">Game Over</h1>
+                <p id="final-score-text">Final Score: {score}</p>
+                <Stack direction="row" spacing={5}>
+                    <Button variant="contained" onClick={resetGame}>Restart</Button>
+                    <Button variant="contained" onClick={() => window.location.href='../../'}>Home</Button>
                 </Stack>
             </div>
-        </div>
-    );
+        );
+    }
 };
