@@ -1,8 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './base.css';
-import Game from './Game'
-import Home from './Home'
+
+// css
+import './common/base.css';
+
+// page components
+import Game from './Game/Game'
+import Home from './Home/Home'
 import reportWebVitals from './reportWebVitals';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
