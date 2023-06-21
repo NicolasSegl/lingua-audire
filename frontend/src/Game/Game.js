@@ -33,6 +33,8 @@ export default function Game() {
     const SELECTED_LANGUAGE = window.location.pathname.split("/")[2].toLowerCase();
     const SELECTED_DIFFICULTY = window.location.pathname.split("/")[3];
 
+    // to be called upon the game being over (should the user decide to restart the game)
+    // it simply resets some of the above values to their origianl states
     function resetGame() {
         setSubmitted(false);
         setSubmitColour("primary");
@@ -42,14 +44,16 @@ export default function Game() {
 
     // performs a GET call to the server for a clip
     function getClip() {
+        // if there is an audio clip currently playing, have it pause
         audioClip.pause();
 
         axios.get('http://localhost:5000/getClip', { params: { language: SELECTED_LANGUAGE, difficulty: SELECTED_DIFFICULTY} }).then(response => {
             // instantiate an audio object using the base64 encoded string of the audio file's raw data as retrieved from the server
             setAudioClip(new Audio("data:audio/mp3;base64," + response.data.audioData));
 
-            // strip the sentence of all punctuation and capitlization, so that we can easily compare the user's answer with the sentence
             currentSentencePunctuation = response.data.sentence;
+
+            // strip the sentence of all punctuation and capitlization, so that we can easily compare the user's answer with the sentence
             currentSentence = currentSentencePunctuation.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
         }).catch(error => {
         console.log(error)
@@ -60,7 +64,10 @@ export default function Game() {
     useEffect(() => getClip(), []);
 
     function prepareClip() {
+        // fetch a new clip from the server
         getClip();
+
+        // unsubmit the answer (meaning the user can know answer, instead of clicking on the "next" button)
         setSubmitted(false);
 
         // reset the colour of the check/next button
@@ -76,7 +83,9 @@ export default function Game() {
 
             let answerInput = document.getElementById("answer-input");
             let userAnswer  = answerInput.value.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
-
+            
+            // compare how close the user's answer is to the correct sentence. if they have a relatively close
+            // levenshtein distance, then we'll say that the user was correct
             if (calcLevDistance(userAnswer, currentSentence) <= currentSentence.length / 15)
             {
                 setSubmitColour("success");
@@ -93,8 +102,10 @@ export default function Game() {
             if (lives == 0) {
                 setLives(lives - 1);
             }
-
-            prepareClip();
+            else {
+                // if there are enough lives remaining for hte player, get the next clip from the server
+                prepareClip();
+            }
         }
     }
 
