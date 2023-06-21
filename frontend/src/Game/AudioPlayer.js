@@ -12,7 +12,7 @@ import SpeedIcon from '@mui/icons-material/Speed'
 import VolumeUp from '@mui/icons-material/VolumeUp'
 
 // constants
-const STARTING_VOLUME = 50;
+const STARTING_VOLUME = 100;
 const STARTING_PLAYBACK_SPEED = 1;
 
 export default function AudioPlayer({ audioClip}) {
