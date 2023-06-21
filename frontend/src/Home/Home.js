@@ -30,7 +30,7 @@ function SelectMenu({ label, items, setFunction }) {
 
     return (
         <>
-            <FormControl sx={{width: 1/5}}>
+            <FormControl sx={{width: 1/8}}>
                 <InputLabel>{label}</InputLabel>
                 <Select
                     value={selectedValue}
