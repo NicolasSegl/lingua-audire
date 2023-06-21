@@ -20,8 +20,6 @@ const SUPPORTED_LANGUAGES = [
 
 const SUPPORTED_DIFFICULTIES = [1, 2, 3];
 
-const DEFAULT_DIFFICULTY = 2;
-
 function SelectMenu({ label, items, setFunction }) {
     const [selectedValue, setSelectedValue] = useState("");
 
@@ -53,7 +51,13 @@ function SelectMenu({ label, items, setFunction }) {
 
 export default function Home() {
     const [redirectLanguage, setRedirectLanguage] = useState("");
-    const [redirectDifficulty, setRedirectDifficulty] = useState(DEFAULT_DIFFICULTY);
+    const [redirectDifficulty, setRedirectDifficulty] = useState(-1);
+
+    function handleStartGameClick() {
+        if (redirectLanguage && redirectDifficulty > 0) {
+            window.location.href='/game/' + redirectLanguage + "/" + redirectDifficulty;
+        }
+    }
 
 	return (
 		<>
@@ -65,7 +69,7 @@ export default function Home() {
             <Stack id="start-game-stack" direction="row" spacing={5}>
                 <SelectMenu items={SUPPORTED_LANGUAGES} setFunction={setRedirectLanguage} label="Language"/>
                 <SelectMenu items={SUPPORTED_DIFFICULTIES} setFunction={setRedirectDifficulty} label="Difficulty"/>
-                <Button variant="contained" onClick={() => window.location.href='/game/' + redirectLanguage + "/" + redirectDifficulty}>Start Game</Button>
+                <Button variant="contained" onClick={handleStartGameClick}>Start Game</Button>
             </Stack>
 		</>
 	);
