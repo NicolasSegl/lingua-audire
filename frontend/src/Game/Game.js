@@ -42,6 +42,8 @@ export default function Game() {
 
     // performs a GET call to the server for a clip
     function getClip() {
+        audioClip.pause();
+
         axios.get('http://localhost:5000/getClip', { params: { language: SELECTED_LANGUAGE, difficulty: SELECTED_DIFFICULTY} }).then(response => {
             // instantiate an audio object using the base64 encoded string of the audio file's raw data as retrieved from the server
             setAudioClip(new Audio("data:audio/mp3;base64," + response.data.audioData));
