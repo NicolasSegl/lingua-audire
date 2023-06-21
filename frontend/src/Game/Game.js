@@ -12,6 +12,7 @@ import TextField from '@mui/material/TextField'
 // custom components
 import AudioPlayer from './AudioPlayer'
 import Gameover from './Gameover'
+import NavBar from '../common/NavBar'
 import Stats, { STARTING_LIVES } from './Stats'
 
 import { calcLevDistance } from './util'
@@ -97,33 +98,41 @@ export default function Game() {
 
     if (lives >= 0) {
         return (
-            <div id="game-container">
-                <div id="menu-container">
-                    <Stats score={score} lives={lives}/>
+            <>
+                <NavBar />
+                <div id="game-container">
+                    <div id="menu-container">
+                        <Stats score={score} lives={lives}/>
 
-                    <AudioPlayer audioClip={audioClip}/>
-                    <TextField
-                        multiline 
-                        fullWidth 
-                        id="answer-input" 
-                        label="Answer" 
-                        variant="outlined" 
-                        disabled={submitted && "disabled"}
-                    />
+                        <AudioPlayer audioClip={audioClip}/>
+                        <TextField
+                            multiline 
+                            fullWidth 
+                            id="answer-input" 
+                            label="Answer" 
+                            variant="outlined" 
+                            disabled={submitted && "disabled"}
+                        />
 
-                    {submitted && 
-                    <p id="correct-sentence">{submitColour === "success" ? "Correct!" : "Incorrect, the sentence was: " + currentSentencePunctuation}</p>
-                    }
+                        {submitted && 
+                        <p id="correct-sentence">{submitColour === "success" ? "Correct!" : "Incorrect, the sentence was: " + currentSentencePunctuation}</p>
+                        }
 
-                    <Stack direction="row" id="difficulty-skip-stack">
-                        <Button variant="outlined" onClick={prepareClip} sx={{fontSize: 20}}>Skip</Button>
-                        <Button color={submitColour} onClick={handleCheckButtonClick} variant="outlined" sx={{fontSize: 20}}>{submitted ? "Next" : "Check"}</Button>
-                    </Stack>
+                        <Stack direction="row" id="difficulty-skip-stack">
+                            <Button variant="outlined" onClick={prepareClip} sx={{fontSize: 20}}>Skip</Button>
+                            <Button color={submitColour} onClick={handleCheckButtonClick} variant="outlined" sx={{fontSize: 20}}>{submitted ? "Next" : "Check"}</Button>
+                        </Stack>
+                    </div>
                 </div>
-            </div>
+            </>
         );
     }
     else {
-        return <Gameover score={score} parentResetFunction={resetGame}/>
+        return (
+            <>
+                <NavBar />
+                <Gameover score={score} parentResetFunction={resetGame}/>
+            </>
+        );
     }
 };

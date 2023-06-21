@@ -11,14 +11,6 @@ import reportWebVitals from './reportWebVitals';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-function NavBar() {
-	return (
-		<div id="NavBar">
-			<a href="/">Lingua Audire</a>
-		</div>
-	);
-}
-
 function Footer() {
 	return (
 		<div id="Footer">
@@ -40,7 +32,6 @@ function Main() {
 function App() {
 	return (
 		<div id="App">
-			<NavBar />
 			<Main />
 			<Footer></Footer>
 		</div>
