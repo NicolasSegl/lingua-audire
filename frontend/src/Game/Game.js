@@ -17,21 +17,21 @@ import Stats, { STARTING_LIVES } from './Stats'
 
 import { calcLevDistance } from './util'
 
-// used for sending GET requests to the server
-// the first 6 charactrs of the path name will be '/game/'
-const SELECTED_LANGUAGE = window.location.pathname.substring(6).toLowerCase();
-
 let currentSentence  = "";
 let currentSentencePunctuation = "";
 
 // the root component of the Game page
 export default function Game() {
-    const [currentDifficulty, setCurrentDifficulty] = useState(2);
     const [submitted, setSubmitted] = useState(false);
     const [submitColour, setSubmitColour] = useState("primary");
     const [score, setScore] = useState(0);
     const [lives, setLives] = useState(STARTING_LIVES);
     const [audioClip, setAudioClip] = useState(new Audio());
+
+    // used for sending GET requests to the server
+    // the second parameter in the array generated below will be the language, and the third will be the difficulty
+    const SELECTED_LANGUAGE = window.location.pathname.split("/")[2].toLowerCase();
+    const SELECTED_DIFFICULTY = window.location.pathname.split("/")[3];
 
     function resetGame() {
         setSubmitted(false);
@@ -42,7 +42,7 @@ export default function Game() {
 
     // performs a GET call to the server for a clip
     function getClip() {
-        axios.get('http://localhost:5000/getClip', { params: { language: SELECTED_LANGUAGE, difficulty: currentDifficulty} }).then(response => {
+        axios.get('http://localhost:5000/getClip', { params: { language: SELECTED_LANGUAGE, difficulty: SELECTED_DIFFICULTY} }).then(response => {
             // instantiate an audio object using the base64 encoded string of the audio file's raw data as retrieved from the server
             setAudioClip(new Audio("data:audio/mp3;base64," + response.data.audioData));
 
@@ -58,7 +58,7 @@ export default function Game() {
     useEffect(() => getClip(), []);
 
     function prepareClip() {
-        getClip(currentDifficulty);
+        getClip();
         setSubmitted(false);
 
         // reset the colour of the check/next button

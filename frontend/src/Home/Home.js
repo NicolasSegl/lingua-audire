@@ -18,29 +18,30 @@ const SUPPORTED_LANGUAGES = [
     "Deutsch",
 ];
 
-let redirectLanguage = "";
+const SUPPORTED_DIFFICULTIES = [1, 2, 3];
 
-function LanguageSelect() {
-    const [selectedLanguage, setSelectedLanguage] = useState('');
+const DEFAULT_DIFFICULTY = 2;
+
+function SelectMenu({ label, items, setFunction }) {
+    const [selectedValue, setSelectedValue] = useState("");
 
     function handleChange(event) {
-        setSelectedLanguage(event.target.value);
-        redirectLanguage = event.target.value;
-        console.log(redirectLanguage);
+        setFunction(event.target.value);
+        setSelectedValue(event.target.value);
     }
 
     return (
         <>
             <FormControl sx={{width: 1/5}}>
-                <InputLabel>Language</InputLabel>
+                <InputLabel>{label}</InputLabel>
                 <Select
-                    value={selectedLanguage}
-                    label="Language"
+                    value={selectedValue}
+                    label={label}
                     onChange={handleChange}
                 >
-                    {SUPPORTED_LANGUAGES.map((language) => (
-                        <MenuItem key={language} value={language}>
-                            {language}
+                    {items.map((value) => (
+                        <MenuItem key={value} value={value}>
+                            {value}
                         </MenuItem> 
                     )
                     )}
@@ -51,6 +52,9 @@ function LanguageSelect() {
 }
 
 export default function Home() {
+    const [redirectLanguage, setRedirectLanguage] = useState("");
+    const [redirectDifficulty, setRedirectDifficulty] = useState(DEFAULT_DIFFICULTY);
+
 	return (
 		<>
 			<h1 id="header">Lingua Audire</h1>
@@ -59,8 +63,9 @@ export default function Home() {
             </div>
 
             <Stack id="start-game-stack" direction="row" spacing={5}>
-                <LanguageSelect />
-                <Button variant="contained" onClick={() => window.location.href='/game/' + redirectLanguage}>Start Game</Button>
+                <SelectMenu items={SUPPORTED_LANGUAGES} setFunction={setRedirectLanguage} label="Language"/>
+                <SelectMenu items={SUPPORTED_DIFFICULTIES} setFunction={setRedirectDifficulty} label="Difficulty"/>
+                <Button variant="contained" onClick={() => window.location.href='/game/' + redirectLanguage + "/" + redirectDifficulty}>Start Game</Button>
             </Stack>
 		</>
 	);
