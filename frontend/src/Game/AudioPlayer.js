@@ -20,6 +20,7 @@ export default function AudioPlayer({ audioClip }) {
     const [playbackSpeed, setPlaybackSpeed] = useState(STARTING_PLAYBACK_SPEED);
     const [time, setTime] = useState(0);
     const [audioDuration, setAudioDuration] = useState(0);
+    const [intervalID, setIntervalID] = useState(null);
 
     function handlePlayButtonClick() {
         audioClip.play();
@@ -45,7 +46,11 @@ export default function AudioPlayer({ audioClip }) {
     useEffect(() => {
         // upon loading all the metadata for the audio file (namely how long the audio is), update the audio player
         audioClip.addEventListener("loadedmetadata", () => {
-            audioClip.ontimeupdate = () => setTime(Math.round(audioClip.currentTime * 10) / 10);
+            // update the time progress bar approximately every 100ms
+            clearInterval(intervalID);
+            setIntervalID(setInterval(() => {
+                setTime(Math.round(audioClip.currentTime * 10) / 10);
+            }, 100));
             setAudioDuration(audioClip.duration);
         });
     });
@@ -69,7 +74,7 @@ export default function AudioPlayer({ audioClip }) {
                 </Tooltip>
                 <Slider valueLabelDisplay="auto" value={volume} onChange={handleVolumeChange}/>
             </Stack>
-            <Slider max={audioDuration} step={0.1} valueLabelDisplay="auto" value={time} onChange={handleTimeChange}/>
+            <Slider max={audioDuration} step={0.01} valueLabelDisplay="auto" value={time} onChange={handleTimeChange}/>
         </>
     );
 }
