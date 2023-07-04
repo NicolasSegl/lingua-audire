@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 // mui components
 import IconButton from '@mui/material/IconButton'
@@ -15,9 +15,11 @@ import VolumeUp from '@mui/icons-material/VolumeUp'
 const STARTING_VOLUME = 100;
 const STARTING_PLAYBACK_SPEED = 1;
 
-export default function AudioPlayer({ audioClip}) {
+export default function AudioPlayer({ audioClip }) {
     const [volume, setVolume] = useState(STARTING_VOLUME);
     const [playbackSpeed, setPlaybackSpeed] = useState(STARTING_PLAYBACK_SPEED);
+    const [time, setTime] = useState(0);
+    const [audioDuration, setAudioDuration] = useState(0);
 
     function handlePlayButtonClick() {
         audioClip.play();
@@ -33,23 +35,41 @@ export default function AudioPlayer({ audioClip}) {
         audioClip.playbackRate = newPlaybackSpeed;
     }
 
+    function handleTimeChange(event, newTime) {
+        setTime(newTime);
+        audioClip.currentTime = newTime;
+        audioClip.pause();
+    }
+
+    // this effect will have its callback called everytime a new audio clip is fetched from the server
+    useEffect(() => {
+        // upon loading all the metadata for the audio file (namely how long the audio is), update the audio player
+        audioClip.addEventListener("loadedmetadata", () => {
+            audioClip.ontimeupdate = () => setTime(Math.round(audioClip.currentTime * 10) / 10);
+            setAudioDuration(audioClip.duration);
+        });
+    });
+
     return (
-    <Stack spacing={1.5} direction="row" id="audio-player">
-        <Tooltip title="Play Audio" placement="top">
-            <IconButton onClick={handlePlayButtonClick}>
-                <PlayArrow />
-            </IconButton>
-        </Tooltip>
+        <>
+            <Stack spacing={1.5} direction="row" id="audio-player">
+                <Tooltip title="Play Audio" placement="top">
+                    <IconButton onClick={handlePlayButtonClick}>
+                        <PlayArrow />
+                    </IconButton>
+                </Tooltip>
 
-        <Tooltip title="Playback Speed" placement="top">
-            <SpeedIcon />
-        </Tooltip>
-        <Slider valueLabelDisplay="auto" min={0.25} max={2.0} step={0.25} value={playbackSpeed} onChange={handlePlaybackSpeedChange}/>
+                <Tooltip title="Playback Speed" placement="top">
+                    <SpeedIcon />
+                </Tooltip>
+                <Slider valueLabelDisplay="auto" min={0.25} max={2.0} step={0.25} value={playbackSpeed} onChange={handlePlaybackSpeedChange}/>
 
-        <Tooltip title="Volume" placement="top">
-            <VolumeUp />
-        </Tooltip>
-        <Slider valueLabelDisplay="auto" value={volume} onChange={handleVolumeChange}/>
-    </Stack>
+                <Tooltip title="Volume" placement="top">
+                    <VolumeUp />
+                </Tooltip>
+                <Slider valueLabelDisplay="auto" value={volume} onChange={handleVolumeChange}/>
+            </Stack>
+            <Slider max={audioDuration} step={0.1} valueLabelDisplay="auto" value={time} onChange={handleTimeChange}/>
+        </>
     );
 }
