@@ -58,6 +58,9 @@ export default function AudioPlayer({ audioClip }) {
             clearInterval(intervalID);
             setIntervalID(setInterval(() => {
                 setTime(Math.round(audioClip.currentTime * 10) / 10);
+                if (audioClip.currentTime == audioClip.duration) {
+                    setIsPaused(true);
+                }
             }, 100));
             setAudioDuration(audioClip.duration);
         });
