@@ -7,6 +7,7 @@ import Stack from '@mui/material/Stack'
 import Tooltip from '@mui/material/Tooltip'
 
 // mui icons
+import Pause from '@mui/icons-material/Pause'
 import PlayArrow from '@mui/icons-material/PlayArrow'
 import SpeedIcon from '@mui/icons-material/Speed'
 import VolumeUp from '@mui/icons-material/VolumeUp'
@@ -21,9 +22,16 @@ export default function AudioPlayer({ audioClip }) {
     const [time, setTime] = useState(0);
     const [audioDuration, setAudioDuration] = useState(0);
     const [intervalID, setIntervalID] = useState(null);
+    const [isPaused, setIsPaused] = useState(true);
 
     function handlePlayButtonClick() {
-        audioClip.play();
+        if (isPaused) {
+            audioClip.play();
+        }
+        else {
+            audioClip.pause();
+        }
+        setIsPaused(!isPaused);
     }
 
     function handleVolumeChange(event, newVolume) {
@@ -58,9 +66,9 @@ export default function AudioPlayer({ audioClip }) {
     return (
         <>
             <Stack spacing={1.5} direction="row" id="audio-player">
-                <Tooltip title="Play Audio" placement="top">
+                <Tooltip title={isPaused ? "Play Audio" : "Pause Audio"} placement="top">
                     <IconButton onClick={handlePlayButtonClick}>
-                        <PlayArrow />
+                        {isPaused ? <PlayArrow /> : <Pause />}
                     </IconButton>
                 </Tooltip>
 
