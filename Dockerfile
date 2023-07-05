@@ -9,6 +9,6 @@ RUN pip3 install -r requirements.txt
 
 COPY . .
 
-EXPOSE 5000
+EXPOSE 80
 ENV FLASK_APP=start.py
-CMD ["flask", "--app", "start", "run", "--host", "0.0.0.0"]
+CMD ["waitress-serve", "--port", "80", "--host", "0.0.0.0", "--call", "backend.api:create_app"]
