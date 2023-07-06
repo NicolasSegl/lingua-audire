@@ -10,7 +10,7 @@ import random # for randomly selecting a clip (will be used only temporarily, fo
 # defines the REST endpoint that handles sending clips to users
 class ClipHandler(Resource):
 	def get(self):
-
+		print("actually in here")
 		# get the difficulty parameter passed in by the client
 		difficulty = int(request.args["difficulty"])
 		language   = request.args["language"]
@@ -29,6 +29,8 @@ class ClipHandler(Resource):
 		fileName = rv[index][SQL_PATH_INDEX]
 		sentence = rv[index][SQL_SENTENCE_INDEX]
 		cursor.close()
+
+		print("sentence being sent: " + sentence)
 
 		# using the clip's filename, send the file to the user
 		with open(f"{language}/clips/" + fileName, "rb") as file:

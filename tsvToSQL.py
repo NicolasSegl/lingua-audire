@@ -56,6 +56,20 @@ with open(tsvFileName, "r", encoding="utf-8") as tsvFile:
     # this file will be filled with all of our SQL commands
     sqlFile = codecs.open(sqlFileName, "w", "utf-8")
 
+    # initialize the database if it has not already been initialized
+    # the weird formatting is so that the formatting looks proper in the .sql files
+    sqlFile.write("""CREATE DATABASE IF NOT EXISTS db;\n
+USE db;
+
+CREATE table IF NOT EXISTS `clip` (
+    path VARCHAR(200),
+    sentence VARCHAR(300),
+    difficulty INT,
+    language VARCHAR(50)
+);
+
+""")
+    
     # the very first line of the .tsv file will detail all of the columns of our table
     # since we already know what the columns will be, we can skip the first line
     line = tsvFile.readline()

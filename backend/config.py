@@ -8,3 +8,9 @@ class devConfig(Config):
     MYSQL_USER     = "root"
     MYSQL_PASSWORD = ""
     MYSQL_DB       = "language-test"
+
+class prodConfig(Config):
+    MYSQL_HOST     = "db"
+    MYSQL_USER     = "root"
+    MYSQL_PASSWORD = "root"
+    MYSQL_DB       = "db"

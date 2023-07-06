@@ -6,7 +6,7 @@ from flask_mysqldb import MySQL
 from backend.ClipHandler import ClipHandler
 from backend.database import db
 from backend.views import blueprint
-from backend.config import devConfig
+from backend.config import devConfig, prodConfig
 
 # create a flask app using the factory pattern
 def create_app():
@@ -26,7 +26,7 @@ def create_app():
     api.add_resource(ClipHandler, "/getClip")
 
     # initialize the app's config
-    app.config.from_object(devConfig)
+    app.config.from_object(prodConfig)
 
     # initialize the database
     db = MySQL(app)

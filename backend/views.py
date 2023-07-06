@@ -6,6 +6,6 @@ blueprint = Blueprint("app", __name__)
 def index():
     return send_from_directory('../frontend/build', "index.html")
 
-@blueprint.route('/game/')
-def game():
-    return send_from_directory("../frontend/build", "game.html")
+@blueprint.route('/game/<path:text>')
+def game(text):
+    return send_from_directory("../frontend/build", "index.html")
