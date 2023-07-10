@@ -6,11 +6,16 @@ from backend.database import db
 
 import base64 # for encoding the audio data so the frontend can handle it
 import random # for randomly selecting a clip (will be used only temporarily, for testing purposes)
+import os # for testing purposes
 
 # defines the REST endpoint that handles sending clips to users
 class ClipHandler(Resource):
 	def get(self):
-		print("actually in here")
+
+		print(os.getcwd()) # print the current working directory
+		print("========")
+		print(os.listdir(os.getcwd()))
+
 		# get the difficulty parameter passed in by the client
 		difficulty = int(request.args["difficulty"])
 		language   = request.args["language"]
@@ -30,10 +35,8 @@ class ClipHandler(Resource):
 		sentence = rv[index][SQL_SENTENCE_INDEX]
 		cursor.close()
 
-		print("sentence being sent: " + sentence)
-
 		# using the clip's filename, send the file to the user
-		with open(f"{language}/clips/" + fileName, "rb") as file:
+		with open(f"languages/{language}/clips/" + fileName, "rb") as file:
 			# encode the file as base64 so that the javascript can play the file as audio
 			response = jsonify({"audioData": base64.b64encode(file.read()).decode("utf-8"), "sentence": sentence})
 			return response

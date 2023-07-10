@@ -29,4 +29,4 @@ For the mySQL database:
 
 For the Lingua Audire web server:
 
-```docker run -p 80:80 linguaaudire```
+```docker run -p 8080:8080 linguaaudire```
