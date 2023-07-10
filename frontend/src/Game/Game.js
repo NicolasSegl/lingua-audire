@@ -40,6 +40,7 @@ export default function Game() {
         setSubmitColour("primary");
         setScore(0);
         setLives(STARTING_LIVES);
+        getClip();
     }
 
     // performs a GET call to the server for a clip
