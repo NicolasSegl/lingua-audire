@@ -62,7 +62,10 @@ export default function AudioPlayer({ audioClip }) {
                     setIsPaused(true);
                 }
             }, 100));
-            setAudioDuration(audioClip.duration);
+
+            if (!isNaN(audioClip.duration)) {
+                setAudioDuration(audioClip.duration);
+            };
         });
 
         // whenever a new clip is received from the server, we must make sure that the play/pause button is a play button
@@ -73,13 +76,18 @@ export default function AudioPlayer({ audioClip }) {
 
     return (
         <>
-            <Stack spacing={1.5} direction="row" id="audio-player">
+            <Stack spacing={1.5} direction="row" id="progress-bar">
                 <Tooltip title={isPaused ? "Play Audio" : "Pause Audio"} placement="top">
                     <IconButton onClick={handlePlayButtonClick}>
                         {isPaused ? <PlayArrow /> : <Pause />}
                     </IconButton>
                 </Tooltip>
+                <p>00:00</p>
+                <Slider max={audioDuration} step={0.01} valueLabelDisplay="auto" value={time} onChange={handleTimeChange}/>
+                <p>{audioDuration / 60 < 10 & "0"}{Math.round(audioDuration / 60)}:{audioDuration % 60 < 10 & "0"}{Math.round(audioDuration % 60)}</p>
+            </Stack>
 
+            <Stack spacing={1.5} direction="row" id="audio-player">
                 <Tooltip title="Playback Speed" placement="top">
                     <SpeedIcon />
                 </Tooltip>
@@ -90,7 +98,6 @@ export default function AudioPlayer({ audioClip }) {
                 </Tooltip>
                 <Slider valueLabelDisplay="auto" value={volume} onChange={handleVolumeChange}/>
             </Stack>
-            <Slider max={audioDuration} step={0.01} valueLabelDisplay="auto" value={time} onChange={handleTimeChange}/>
         </>
     );
 }
