@@ -32,6 +32,7 @@ function Main() {
 function App() {
 	return (
 		<div id="App">
+			<link rel="icon" type="image/x-icon" href="./favicon.ico" />
 			<Main />
 			<Footer></Footer>
 		</div>
