@@ -64,6 +64,11 @@ export default function AudioPlayer({ audioClip }) {
             }, 100));
             setAudioDuration(audioClip.duration);
         });
+
+        // whenever a new clip is received from the server, we must make sure that the play/pause button is a play button
+        if (!isPaused && audioClip.paused) {
+            setIsPaused(true);
+        }
     });
 
     return (
