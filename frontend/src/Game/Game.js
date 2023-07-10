@@ -109,6 +109,20 @@ export default function Game() {
         }
     }
 
+    function handleSkipButtonClick() {
+        prepareClip();
+
+        // remove a life on a clip being skipped
+        setLives(lives - 1);
+
+        // this if statement works with the logic of returning the gameover page when lives < 0
+        // having this if statement immediately sends the user to the game over page upon using up all their lives
+        // (instead of giving them the chance to see the correct answer, as it works when using the "check" button)
+        if (lives == 1) {
+            setLives(lives - 2);
+        }
+    }
+
     if (lives >= 0) {
         return (
             <>
@@ -132,7 +146,7 @@ export default function Game() {
                         }
 
                         <Stack direction="row" id="difficulty-skip-stack">
-                            <Button variant="outlined" onClick={prepareClip} sx={{fontSize: 20}}>Skip</Button>
+                            <Button variant="outlined" onClick={handleSkipButtonClick} sx={{fontSize: 20}}>Skip</Button>
                             <Button color={submitColour} onClick={handleCheckButtonClick} variant="outlined" sx={{fontSize: 20}}>{submitted ? "Next" : "Check"}</Button>
                         </Stack>
                     </div>
