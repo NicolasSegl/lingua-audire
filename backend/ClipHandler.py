@@ -29,11 +29,15 @@ class ClipHandler(Resource):
 			cursor.close()
 			return
 		
-		rv = cursor.fetchall()
-		index = random.randint(0, len(rv) - 1)
-		fileName = rv[index][SQL_PATH_INDEX]
-		sentence = rv[index][SQL_SENTENCE_INDEX]
-		cursor.close()
+		try:
+			rv = cursor.fetchall()
+			index = random.randint(0, len(rv) - 1)
+			fileName = rv[index][SQL_PATH_INDEX]
+			sentence = rv[index][SQL_SENTENCE_INDEX]
+			cursor.close()
+		except:
+			cursor.close()
+			return
 
 		# this ensures that the file will be found (some of the .tsv files include the name
 		# of the audio file, but omit the .mp3 extension on the name)
