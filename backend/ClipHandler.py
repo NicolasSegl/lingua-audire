@@ -24,7 +24,7 @@ class ClipHandler(Resource):
 		cursor = db.connection.cursor()
 
 		try:
-			cursor.execute(f"SELECT * FROM clip WHERE clip.language = \"{language}\" AND clip.difficulty < {difficulty * 10} AND clip.difficulty > {difficulty * 10 - 10}")
+			cursor.execute(f"SELECT * FROM clip WHERE clip.language = \"{language}\" AND clip.difficulty < {difficulty * 8} AND clip.difficulty > {difficulty * 8 - 8}")
 		except:
 			cursor.close()
 			return
