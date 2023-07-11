@@ -35,6 +35,11 @@ class ClipHandler(Resource):
 		sentence = rv[index][SQL_SENTENCE_INDEX]
 		cursor.close()
 
+		# this ensures that the file will be found (some of the .tsv files include the name
+		# of the audio file, but omit the .mp3 extension on the name)
+		if fileName[len(fileName) - 1] != '3':
+			fileName += ".mp3"
+
 		# using the clip's filename, send the file to the user
 		with open(f"languages/{language}/clips/" + fileName, "rb") as file:
 			# encode the file as base64 so that the javascript can play the file as audio

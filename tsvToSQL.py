@@ -6,7 +6,7 @@ import codecs
 from backend.constants import TSV_PATH_INDEX, TSV_SENTENCE_INDEX
 
 # constants for calculating word difficulty
-VOWELS = "aeiouyæøåäöü"
+VOWELS = "aeiouyæøåäöüоыиэяюёе"
 HARD_WORD_VALUE = 2
 EASY_WORD_VALUE = 1
 

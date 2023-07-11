@@ -14,8 +14,13 @@ import './Home.css'
 
 // an array with all the supported languages
 const SUPPORTED_LANGUAGES = [
-    "Dansk",
-    "Deutsch",
+    "Danish",
+    "English",
+    "French",
+    "German",
+    "Italian",
+    "Russian",
+    "Spanish",
 ];
 
 const SUPPORTED_DIFFICULTIES = [1, 2, 3];
