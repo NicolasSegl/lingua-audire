@@ -98,7 +98,7 @@ export default function AudioPlayer({ audioClip }) {
             </Stack>
 
             <Stack spacing={1.5} direction="row" id="audio-player">
-                <Tooltip title="Playback Speed" placement="top">
+                <Tooltip title="Playback Speed" placement="left">
                     <SpeedIcon />
                 </Tooltip>
                 <Slider valueLabelDisplay="auto" min={0.25} max={2.0} step={0.25} value={playbackSpeed} onChange={handlePlaybackSpeedChange}/>
