@@ -25,13 +25,17 @@ export default function AudioPlayer({ audioClip }) {
     const [isPaused, setIsPaused] = useState(true);
 
     function handlePlayButtonClick() {
-        if (isPaused) {
-            audioClip.play();
+        // only allow the play/pause button to be pressed if the audio clip has been loaded (meaning it has 
+        // a duration that is a number)
+        if (!isNaN(audioClip.duration)) {
+            if (isPaused) {
+                audioClip.play();
+            }
+            else {
+                audioClip.pause();
+            }
+            setIsPaused(!isPaused);
         }
-        else {
-            audioClip.pause();
-        }
-        setIsPaused(!isPaused);
     }
 
     function handleVolumeChange(event, newVolume) {
@@ -71,6 +75,12 @@ export default function AudioPlayer({ audioClip }) {
         // whenever a new clip is received from the server, we must make sure that the play/pause button is a play button
         if (!isPaused && audioClip.paused) {
             setIsPaused(true);
+        }
+        
+        // if the audio clip's duration is NaN then it means there exists no audio clip
+        // in this case, we want to say that the duration of the clip is 0 seconds
+        if (isNaN(audioClip.duration)) {
+            setAudioDuration(0);
         }
     });
 

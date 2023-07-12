@@ -45,8 +45,11 @@ export default function Game() {
 
     // performs a GET call to the server for a clip
     function getClip() {
-        // if there is an audio clip currently playing, have it pause
+        // if there is an audio clip currently playing, have it pause 
         audioClip.pause();
+
+        // this will prevent the previous audio clip's data from preserving until a new audio clip has been fetched
+        setAudioClip(new Audio());
 
         axios.get('https://lingua-audire-owxddexg4q-ue.a.run.app/getClip', { params: { language: SELECTED_LANGUAGE, difficulty: SELECTED_DIFFICULTY} }).then(response => {
             // instantiate an audio object using the base64 encoded string of the audio file's raw data as retrieved from the server
