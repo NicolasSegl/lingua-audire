@@ -61,9 +61,12 @@ export default function AudioPlayer({ audioClip }) {
             // update the time progress bar approximately every 100ms
             clearInterval(intervalID);
             setIntervalID(setInterval(() => {
-                setTime(Math.round(audioClip.currentTime * 10) / 10);
-                if (audioClip.currentTime == audioClip.duration) {
-                    setIsPaused(true);
+                if (!isNaN(audioClip.duration))
+                {
+                    setTime(Math.round(audioClip.currentTime * 10) / 10);
+                    if (audioClip.currentTime == audioClip.duration) {
+                        setIsPaused(true);
+                    }
                 }
             }, 100));
 
@@ -81,6 +84,7 @@ export default function AudioPlayer({ audioClip }) {
         // in this case, we want to say that the duration of the clip is 0 seconds
         if (isNaN(audioClip.duration)) {
             setAudioDuration(0);
+            setTime(0);
         }
     });
 
