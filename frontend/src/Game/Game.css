@@ -52,3 +52,10 @@
 #correct-sentence {
     text-align: center;
 }
+
+/* for mobile devices in portrait mode */
+@media only screen and (max-width: 600px) {
+    #menu-container {
+        width: 90%;
+    }
+}

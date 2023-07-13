@@ -28,6 +28,7 @@ code {
 #Footer {
 	display: flex;
 	justify-content: center;
+	width: 100%;
 
 	/* put the footer at the bottom of the page */
 	position: absolute;
@@ -35,8 +36,17 @@ code {
 }
 
 #Footer * {
-	font-size: 14px;
+	font-size: 0.9em;
 	width: 33%;
 	margin-bottom: 3%;
 	color: rgb(182, 182, 182);
+	overflow-wrap: break-word; 
+}
+
+/* for mobile devices in portrait mode */
+@media only screen and (max-width: 600px) {
+    #Footer * {
+		width: 45%;
+		padding: 2%;
+	}
 }

@@ -35,7 +35,7 @@ function SelectMenu({ label, items, setFunction }) {
 
     return (
         <>
-            <FormControl sx={{width: 1/8}}>
+            <FormControl id="start-game-widgets">
                 <InputLabel>{label}</InputLabel>
                 <Select
                     value={selectedValue}
