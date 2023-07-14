@@ -11,11 +11,6 @@ import os # for testing purposes
 # defines the REST endpoint that handles sending clips to users
 class ClipHandler(Resource):
 	def get(self):
-
-		print(os.getcwd()) # print the current working directory
-		print("========")
-		print(os.listdir(os.getcwd()))
-
 		# get the difficulty parameter passed in by the client
 		difficulty = int(request.args["difficulty"])
 		language   = request.args["language"]
@@ -24,7 +19,7 @@ class ClipHandler(Resource):
 		cursor = db.connection.cursor()
 
 		try:
-			cursor.execute(f"SELECT * FROM clip WHERE clip.language = \"{language}\" AND clip.difficulty < {difficulty * 8} AND clip.difficulty > {difficulty * 8 - 8}")
+			cursor.execute(f"SELECT * FROM clip WHERE clip.language = \"{language}\" AND clip.difficulty < {difficulty * 8} AND clip.difficulty > {difficulty * 8 - 8} ORDER BY RAND () LIMIT 1")
 		except:
 			cursor.close()
 			return
