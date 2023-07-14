@@ -41,7 +41,7 @@ class ClipHandler(Resource):
 
 		# this ensures that the file will be found (some of the .tsv files include the name
 		# of the audio file, but omit the .mp3 extension on the name)
-		if fileName[len(fileName) - 1] != '3':
+		if not fileName.endswith(".mp3"):
 			fileName += ".mp3"
 
 		# using the clip's filename, send the file to the user
