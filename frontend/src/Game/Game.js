@@ -80,35 +80,38 @@ export default function Game() {
         // reset the text inside the answer textfield
         document.getElementById("answer-input").value = "";
     }
-
+    
     function handleCheckButtonClick() {
-        if (!submitted) {
-            setSubmitted(true);
+        // only allow the check button to be pressed if the audio clip has loaded
+        if (!isNaN(audioClip.duration)) {
+            if (!submitted) {
+                setSubmitted(true);
 
-            let answerInput = document.getElementById("answer-input");
-            let userAnswer  = answerInput.value.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
-            
-            // compare how close the user's answer is to the correct sentence. if they have a relatively close
-            // levenshtein distance, then we'll say that the user was correct
-            if (calcLevDistance(userAnswer, currentSentence) <= currentSentence.length / 15)
-            {
-                setSubmitColour("success");
-                setScore(score + 1);
+                let answerInput = document.getElementById("answer-input");
+                let userAnswer  = answerInput.value.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+                
+                // compare how close the user's answer is to the correct sentence. if they have a relatively close
+                // levenshtein distance, then we'll say that the user was correct
+                if (calcLevDistance(userAnswer, currentSentence) <= currentSentence.length / 15)
+                {
+                    setSubmitColour("success");
+                    setScore(score + 1);
+                }
+                else {
+                    setLives(lives - 1);
+                    setSubmitColour("error");
+                }
             }
             else {
-                setLives(lives - 1);
-                setSubmitColour("error");
-            }
-        }
-        else {
-            // this if statement allows for the user the chance to see their mistake on the final wrong answer for the game
-            // upon clicking next again, the game will be over
-            if (lives == 0) {
-                setLives(lives - 1);
-            }
-            else {
-                // if there are enough lives remaining for hte player, get the next clip from the server
-                prepareClip();
+                // this if statement allows for the user the chance to see their mistake on the final wrong answer for the game
+                // upon clicking next again, the game will be over
+                if (lives == 0) {
+                    setLives(lives - 1);
+                }
+                else {
+                    // if there are enough lives remaining for hte player, get the next clip from the server
+                    prepareClip();
+                }
             }
         }
     }
