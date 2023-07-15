@@ -23,13 +23,23 @@ const SUPPORTED_LANGUAGES = [
     "Spanish",
 ];
 
-const SUPPORTED_DIFFICULTIES = [1, 2, 3];
+const SUPPORTED_DIFFICULTIES = ["Easy", "Medium", "Hard"];
 
 function SelectMenu({ label, items, setFunction }) {
     const [selectedValue, setSelectedValue] = useState("");
 
     function handleChange(event) {
-        setFunction(event.target.value);
+        // for converting difficulty names to their respective numbers
+        if (event.target.value == "Easy") {
+            setFunction(1);
+        } else if (event.target.value == "Medium") {
+            setFunction(2);
+        } else if (event.target.value == "Hard") {
+            setFunction(3);
+        } else {
+            setFunction(event.target.value);
+        }
+
         setSelectedValue(event.target.value);
     }
 
