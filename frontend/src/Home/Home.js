@@ -23,7 +23,7 @@ const SUPPORTED_LANGUAGES = [
     "Spanish",
 ];
 
-const SUPPORTED_DIFFICULTIES = ["Easy", "Medium", "Hard"];
+const SUPPORTED_DIFFICULTIES = ["Easy", "Medium", "Hard", "Very Hard"];
 
 function SelectMenu({ label, items, setFunction }) {
     const [selectedValue, setSelectedValue] = useState("");
@@ -36,6 +36,8 @@ function SelectMenu({ label, items, setFunction }) {
             setFunction(2);
         } else if (event.target.value == "Hard") {
             setFunction(3);
+        } else if (event.target.value == "Very Hard") {
+            setFunction(4);
         } else {
             setFunction(event.target.value);
         }

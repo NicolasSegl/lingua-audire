@@ -18,12 +18,28 @@ class ClipHandler(Resource):
 		# query the database for a random clip
 		cursor = db.connection.cursor()
 
+		# defines the lower boundary for the requested clip's difficulty (assuming a default difficulty of 1/easy)
+		difficultyLower  = 0
+
+		# defines the upper boundary for the requested clip's difficulty (assuming a default difficulty of 1/easy)
+		difficultyUpper = 12
+
+		if difficulty == 2: # medium difficulty
+			difficultyLower = 13
+			difficultyUpper = 40
+		elif difficulty == 3: # hard difficulty
+			difficultyLower = 41
+			difficultyUpper = 100
+		elif difficulty >= 4: # very hard difficulty (or the user has typed into the url their own difficulty)
+			difficultyLower = 101
+			difficultyUpper = 9999
+
 		try:
-			cursor.execute(f"SELECT * FROM clip WHERE clip.language = \"{language}\" AND clip.difficulty < {difficulty * 8} AND clip.difficulty > {difficulty * 8 - 8} ORDER BY RAND () LIMIT 1")
+			cursor.execute(f"SELECT * FROM clip WHERE clip.language = \"{language}\" AND clip.difficulty < {difficultyUpper} AND clip.difficulty > {difficultyLower} ORDER BY RAND () LIMIT 1")
 		except:
 			cursor.close()
 			return
-		
+				
 		try:
 			rv = cursor.fetchall()
 			index = random.randint(0, len(rv) - 1)
