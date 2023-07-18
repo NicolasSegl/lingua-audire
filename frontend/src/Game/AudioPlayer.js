@@ -14,11 +14,11 @@ import VolumeUp from '@mui/icons-material/VolumeUp'
 
 // constants
 const STARTING_VOLUME = 100;
-const STARTING_PLAYBACK_SPEED = 1;
+const STARTING_PLAYBACK_RATE = 1;
 
 export default function AudioPlayer({ audioClip }) {
     const [volume, setVolume] = useState(STARTING_VOLUME);
-    const [playbackSpeed, setPlaybackSpeed] = useState(STARTING_PLAYBACK_SPEED);
+    const [playbackRate, setPlaybackRate] = useState(STARTING_PLAYBACK_RATE);
     const [time, setTime] = useState(0);
     const [audioDuration, setAudioDuration] = useState(0);
     const [intervalID, setIntervalID] = useState(null);
@@ -43,9 +43,9 @@ export default function AudioPlayer({ audioClip }) {
         audioClip.volume = newVolume / 100;
     }
 
-    function handlePlaybackSpeedChange(event, newPlaybackSpeed) {
-        setPlaybackSpeed(newPlaybackSpeed);
-        audioClip.playbackRate = newPlaybackSpeed;
+    function handleplaybackRateChange(event, newPlaybackRate) {
+        setPlaybackRate(newPlaybackRate);
+        audioClip.playbackRate = newPlaybackRate;
     }
 
     function handleTimeChange(event, newTime) {
@@ -70,8 +70,13 @@ export default function AudioPlayer({ audioClip }) {
                 }
             }, 100));
 
+            // if the audio duration of the clip is a number (meaning the clip has properly loaded)
+            // then we will want to set the progress bar's upper limit as well as set the new clip's
+            // playback rate and volume to the user's selected values
             if (!isNaN(audioClip.duration)) {
                 setAudioDuration(audioClip.duration);
+                audioClip.volume = volume / 100;
+                audioClip.playbackRate = playbackRate;
             };
         });
 
@@ -105,7 +110,7 @@ export default function AudioPlayer({ audioClip }) {
                 <Tooltip title="Playback Speed" placement="left">
                     <SpeedIcon />
                 </Tooltip>
-                <Slider valueLabelDisplay="auto" min={0.25} max={2.0} step={0.25} value={playbackSpeed} onChange={handlePlaybackSpeedChange}/>
+                <Slider valueLabelDisplay="auto" min={0.25} max={2.0} step={0.25} value={playbackRate} onChange={handleplaybackRateChange}/>
 
                 <Tooltip title="Volume" placement="top">
                     <VolumeUp />
