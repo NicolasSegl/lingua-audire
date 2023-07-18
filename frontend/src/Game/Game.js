@@ -22,11 +22,12 @@ let currentSentencePunctuation = "";
 
 // the root component of the Game page
 export default function Game() {
-    const [submitted, setSubmitted] = useState(false);
-    const [submitColour, setSubmitColour] = useState("primary");
-    const [score, setScore] = useState(0);
-    const [lives, setLives] = useState(STARTING_LIVES);
-    const [audioClip, setAudioClip] = useState(new Audio());
+    const [submitted, setSubmitted]           = useState(false);
+    const [submitColour, setSubmitColour]     = useState("primary");
+    const [score, setScore]                   = useState(0);
+    const [lives, setLives]                   = useState(STARTING_LIVES);
+    const [audioClip, setAudioClip]           = useState(new Audio());
+    const [hintButtonUsed, setHintButtonUsed] = useState(false);
 
     // used for sending GET requests to the server
     // the second parameter in the array generated below will be the language, and the third will be the difficulty
@@ -79,6 +80,9 @@ export default function Game() {
         
         // reset the text inside the answer textfield
         document.getElementById("answer-input").value = "";
+
+        // allow the hint button to be used again
+        setHintButtonUsed(false);
     }
     
     function handleCheckButtonClick() {
@@ -116,17 +120,47 @@ export default function Game() {
         }
     }
 
-    function handleSkipButtonClick() {
-        prepareClip();
+    function handleHintButtonClick() {
+        // only allow the hint button to be used if it has not yet been used this clip
+        if (!hintButtonUsed) {
+            // stores the words that the user has typed into the answer input in an array
+            let userWords     = document.getElementById("answer-input").value.toLowerCase().split(" ");
+            let sentenceWords = currentSentence.split(" ");
 
-        // remove a life on a clip being skipped
-        setLives(lives - 1);
+            // iterate over every word in the list of words the user has typed in
+            // if we have to fix two words, then we will not give the user an extra word
+            let fixedWordCount = 0;
+            for (let wordIndex = 0; wordIndex < userWords.length; wordIndex += 1) {
+                // remove all spaces from the user's answer (as it will interfer with finding a hint for the words)
+                if (userWords[wordIndex] == '') {
+                    userWords.splice(wordIndex, 1);
+                    wordIndex -= 1;
+                    continue;
+                }
 
-        // this if statement works with the logic of returning the gameover page when lives < 0
-        // having this if statement immediately sends the user to the game over page upon using up all their lives
-        // (instead of giving them the chance to see the correct answer, as it works when using the "check" button)
-        if (lives == 1) {
-            setLives(lives - 2);
+                // if the words do not match, then fix the user's answer
+                if (userWords[wordIndex] != sentenceWords[wordIndex]) {
+                    userWords[wordIndex] = sentenceWords[wordIndex];
+                    fixedWordCount += 1;
+                    if (fixedWordCount >= 2) {
+                        break;
+                    }
+                }
+            }
+
+            // change the actual text field's answer to its (potentially) new value
+            document.getElementById("answer-input").value = userWords.join(" ");
+
+            // if no words or just one word was fixed, give the user another word (if there is another word they need)
+            if (fixedWordCount < 2 && userWords.length < sentenceWords.length) {
+                if (userWords[0] == '') {
+                    document.getElementById("answer-input").value += " " + sentenceWords[userWords.length - 1];
+                } else {
+                    document.getElementById("answer-input").value += " " + sentenceWords[userWords.length];
+                }
+            }
+
+            setHintButtonUsed(true);
         }
     }
 
@@ -140,6 +174,7 @@ export default function Game() {
 
                         <AudioPlayer audioClip={audioClip}/>
                         <TextField
+                            InputLabelProps={{ shrink: true }}
                             multiline 
                             fullWidth 
                             id="answer-input" 
@@ -152,8 +187,8 @@ export default function Game() {
                         <p id="correct-sentence">{submitColour === "success" ? "Correct!" : "Incorrect, the sentence was: " + currentSentencePunctuation}</p>
                         }
 
-                        <Stack direction="row" id="difficulty-skip-stack">
-                            <Button variant="outlined" onClick={handleSkipButtonClick} sx={{fontSize: 20}}>Skip</Button>
+                        <Stack direction="row" id="difficulty-hint-stack">
+                            <Button color={hintButtonUsed ? "error" : "primary"} variant="outlined" onClick={handleHintButtonClick} sx={{fontSize: 20}}>hint</Button>
                             <Button color={submitColour} onClick={handleCheckButtonClick} variant="outlined" sx={{fontSize: 20}}>{submitted ? "Next" : "Check"}</Button>
                         </Stack>
                     </div>
