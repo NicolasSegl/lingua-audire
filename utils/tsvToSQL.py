@@ -3,7 +3,7 @@
 import sys
 import codecs
 
-from backend.constants import TSV_PATH_INDEX, TSV_SENTENCE_INDEX, TSV_ACCENT_INDEX
+from constants import TSV_PATH_INDEX, TSV_SENTENCE_INDEX, TSV_ACCENT_INDEX
 
 # constants for calculating word difficulty
 VOWELS = "aeiouyæøåäöüоыиэяюёе"
@@ -83,9 +83,9 @@ CREATE table IF NOT EXISTS `clip` (
         # get all of the columns of the .tsv file into a list
         columns = line.rstrip().split('\t')
 
-        if dialectToOmit not in columns[TSV_ACCENT_INDEX].lower():
-            sqlFile.write(f"INSERT INTO {TABLE_NAME}(path, sentence, difficulty, language)\n")
-            sqlFile.write(f"VALUES(\"{columns[TSV_PATH_INDEX]}\", \"{columns[TSV_SENTENCE_INDEX]}\", {calcDifficulty(columns[TSV_SENTENCE_INDEX])}, \"{language}\");\n\n")
+        # if dialectToOmit not in columns[TSV_ACCENT_INDEX].lower():
+        sqlFile.write(f"INSERT INTO {TABLE_NAME}(path, sentence, difficulty, language)\n")
+        sqlFile.write(f"VALUES(\"{columns[TSV_PATH_INDEX]}\", \"{columns[TSV_SENTENCE_INDEX]}\", {calcDifficulty(columns[TSV_SENTENCE_INDEX])}, \"{language}\");\n\n")
 
         line = tsvFile.readline().replace('\"', "")
 

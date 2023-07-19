@@ -6,7 +6,7 @@ import codecs
 import string
 import sys
 
-from backend.constants import TSV_SENTENCE_INDEX, TSV_PATH_INDEX
+from constants import TSV_SENTENCE_INDEX, TSV_PATH_INDEX
 
 FREQUENCY_INDEX = 0
 WORD_INDEX      = 1
