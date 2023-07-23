@@ -6,10 +6,7 @@ import codecs
 import string
 import sys
 
-from constants import TSV_SENTENCE_INDEX, TSV_PATH_INDEX
-
-FREQUENCY_INDEX = 0
-WORD_INDEX      = 1
+from constants import TSV_SENTENCE_INDEX, TSV_PATH_INDEX, FREQUENCY_INDEX, WORD_INDEX
 
 if (len(sys.argv) != 3):
     print("Usage: python newDifficulty.py <Language TSV file> <Word frequency file>")

@@ -7,7 +7,7 @@ class devConfig(Config):
     MYSQL_HOST     = "localhost"
     MYSQL_USER     = "root"
     MYSQL_PASSWORD = ""
-    MYSQL_DB       = "language-test"
+    MYSQL_DB       = "db"
 
 class prodConfig(Config):
     # MYSQL_HOST     = "/cloudsql/lingua-audire:us-central1:lingua-audire-mysql"

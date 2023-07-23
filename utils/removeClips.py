@@ -12,7 +12,8 @@ if len(sys.argv) != 2:
 languageDir = sys.argv[1]
 os.chdir(languageDir)
 for fileName in os.listdir("."):
-    if fileName.endswith(".tsv") and fileName != "validated.tsv":
+    if fileName.endswith(".tsv") and fileName != "validated.tsv" and fileName != "dev.tsv" and fileName != "test.tsv" and fileName != "train.tsv":
+        print(fileName)
         with open(fileName, "r", encoding="utf-8") as file:
             line = file.readline().replace('\"', "")
             while line:
