@@ -15,7 +15,7 @@ import Gameover from './Gameover'
 import NavBar from '../common/NavBar'
 import Stats, { STARTING_LIVES } from './Stats'
 
-import { calcLevDistance } from './util'
+import { calcLevDistance, getCookieValue } from './util'
 
 let currentSentence  = "";
 let currentSentencePunctuation = "";
@@ -26,6 +26,8 @@ export default function Game() {
     const [submitted, setSubmitted]           = useState(false);
     const [submitColour, setSubmitColour]     = useState("primary");
     const [score, setScore]                   = useState(0);
+    const [highScore, setHighScore]           = useState(0);
+    const [isNewHighScore, setIsNewHighScore] = useState(false);
     const [lives, setLives]                   = useState(STARTING_LIVES);
     const [audioClip, setAudioClip]           = useState(new Audio());
     const [hintButtonUsed, setHintButtonUsed] = useState(false);
@@ -45,6 +47,7 @@ export default function Game() {
         setScore(0);
         setLives(STARTING_LIVES);
         getClip();
+        setIsNewHighScore(false);
     }
 
     // performs a GET call to the server for a clip
@@ -70,7 +73,16 @@ export default function Game() {
     }
 
     // immediately get a clip from the server upon the game interface loading
-    useEffect(() => getClip(), []);
+    // as well, fetch the high score for the language (if one so exists)
+    useEffect(() => {
+        getClip();
+
+        // fetch the high score from the browser's cookies
+        let highScore = getCookieValue("highscore");
+        if (highScore != '') {
+            setHighScore(Number(highScore));
+        }
+    }, []);
 
     function prepareClip() {
         // fetch a new clip from the server
@@ -123,6 +135,14 @@ export default function Game() {
                     // if there are enough lives remaining for hte player, get the next clip from the server
                     prepareClip();
                 }
+            }
+
+            let highScore = getCookieValue("highscore");
+
+            if (highScore === '' || score > Number(highScore)) {
+                setHighScore(Number(score));
+                document.cookie = "highscore=" + score + "; expires=Tues, 1 Jan 2030 12:00:00 UTC; path=" + window.location.pathname;
+                setIsNewHighScore(true);
             }
         }
     }
@@ -188,7 +208,7 @@ export default function Game() {
                 <NavBar />
                 <div id="game-container">
                     <div id="menu-container">
-                        <Stats score={score} lives={lives}/>
+                        <Stats score={score} highScore={highScore} lives={lives}/>
 
                         <AudioPlayer audioClip={audioClip}/>
                         <TextField
@@ -223,7 +243,7 @@ export default function Game() {
         return (
             <>
                 <NavBar />
-                <Gameover score={score} parentResetFunction={resetGame}/>
+                <Gameover score={score} isNewHighScore={isNewHighScore} parentResetFunction={resetGame}/>
             </>
         );
     }

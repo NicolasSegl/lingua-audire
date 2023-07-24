@@ -34,3 +34,7 @@ export function calcLevDistance(a, b) {
   
     return matrix[b.length][a.length];
 };
+
+export function getCookieValue (name) {
+  return document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || '';
+}
