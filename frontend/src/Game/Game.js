@@ -39,6 +39,7 @@ export default function Game() {
     // to be called upon the game being over (should the user decide to restart the game)
     // it simply resets some of the above values to their origianl states
     function resetGame() {
+        setHintButtonUsed(false);
         setSubmitted(false);
         setSubmitColour("primary");
         setScore(0);
