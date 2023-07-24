@@ -19,6 +19,7 @@ import { calcLevDistance } from './util'
 
 let currentSentence  = "";
 let currentSentencePunctuation = "";
+let currentClipPath = "";
 
 // the root component of the Game page
 export default function Game() {
@@ -28,6 +29,7 @@ export default function Game() {
     const [lives, setLives]                   = useState(STARTING_LIVES);
     const [audioClip, setAudioClip]           = useState(new Audio());
     const [hintButtonUsed, setHintButtonUsed] = useState(false);
+    const [isClipReported, setClipReported]   = useState(false);
 
     // used for sending GET requests to the server
     // the second parameter in the array generated below will be the language, and the third will be the difficulty
@@ -56,6 +58,7 @@ export default function Game() {
             // instantiate an audio object using the base64 encoded string of the audio file's raw data as retrieved from the server
             setAudioClip(new Audio("data:audio/mp3;base64," + response.data.audioData));
             
+            currentClipPath = response.data.path;
             currentSentencePunctuation = response.data.sentence;
 
             // strip the sentence of all punctuation and capitlization, so that we can easily compare the user's answer with the sentence
@@ -82,6 +85,9 @@ export default function Game() {
         document.getElementById("answer-input").value = "";
 
         // allow the hint button to be used again
+        setHintButtonUsed(false);
+
+        // allow the report button to be used again
         setHintButtonUsed(false);
     }
     
@@ -164,6 +170,17 @@ export default function Game() {
         }
     }
 
+    function handleReportbuttonClicked() {
+        // only allow the report button to be used if it has not yet been used this clip
+        if (!isClipReported) {
+            console.log(currentClipPath);
+            // send a post request to the backend to handle the report
+            axios.post("https://lingua-audire-owxddexg4q-ue.a.run.app/reportClip", { path: currentClipPath });
+
+            setClipReported(true);
+        }
+    }
+
     if (lives >= 0) {
         return (
             <>
@@ -188,7 +205,12 @@ export default function Game() {
                         }
 
                         <Stack direction="row" id="difficulty-hint-stack">
-                            <Button color={hintButtonUsed ? "error" : "primary"} variant="outlined" onClick={handleHintButtonClick} sx={{fontSize: 20}}>hint</Button>
+                            {
+                            !submitted ?
+                                <Button color={hintButtonUsed ? "error" : "primary"} variant="outlined" onClick={handleHintButtonClick} sx={{fontSize: 20}}>hint</Button>
+                            :
+                                <Button color={isClipReported ? "error" : "primary"} variant="outlined" onClick={handleReportbuttonClicked} sx={{fontSize: 20}}>report clip</Button>
+                            }
                             <Button color={submitColour} onClick={handleCheckButtonClick} variant="outlined" sx={{fontSize: 20}}>{submitted ? "Next" : "Check"}</Button>
                         </Stack>
                     </div>

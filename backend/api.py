@@ -4,6 +4,7 @@ from flask_restful import Api
 from flask_mysqldb import MySQL
 
 from backend.ClipHandler import ClipHandler
+from backend.ReportHandler import ReportHandler
 from backend.database import db
 from backend.views import blueprint
 from backend.config import devConfig, prodConfig
@@ -24,6 +25,7 @@ def create_app():
 
     # setup the REST endpoints
     api.add_resource(ClipHandler, "/getClip")
+    api.add_resource(ReportHandler, "/reportClip")
 
     # initialize the app's config
     app.config.from_object(prodConfig)
