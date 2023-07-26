@@ -29,6 +29,10 @@ code {
 	text-decoration: none;
 }
 
+#NavBar a:hover {
+	font-weight: 700;
+}
+
 #Footer {
 	display: flex;
 	justify-content: center;
