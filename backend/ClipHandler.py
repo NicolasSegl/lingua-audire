@@ -41,10 +41,9 @@ class ClipHandler(Resource):
 			return
 				
 		try:
-			rv = cursor.fetchall()
-			index = random.randint(0, len(rv) - 1)
-			fileName = rv[index][SQL_PATH_INDEX]
-			sentence = rv[index][SQL_SENTENCE_INDEX]
+			rv = cursor.fetchone()
+			fileName = rv[SQL_PATH_INDEX]
+			sentence = rv[SQL_SENTENCE_INDEX]
 			cursor.close()
 		except:
 			cursor.close()
