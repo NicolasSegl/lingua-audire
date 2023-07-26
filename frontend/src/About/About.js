@@ -1,7 +1,14 @@
+import React, { useEffect } from 'react'
+
 // css
 import './About.css'
 
 export default function About() {
+    // on page load, change the tab title
+    useEffect(() => {
+        document.title = "Lingua Audire - About"
+    }, []);
+
     return (
         <div id="about-container">
             <h1>About Lingua Audire</h1>

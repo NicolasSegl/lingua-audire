@@ -74,6 +74,7 @@ export default function Game() {
 
     // immediately get a clip from the server upon the game interface loading
     // as well, fetch the high score for the language (if one so exists)
+    // and change the tab's title
     useEffect(() => {
         getClip();
 
@@ -82,6 +83,9 @@ export default function Game() {
         if (highScore != '') {
             setHighScore(Number(highScore));
         }
+
+        // set the tab's title
+        document.title = "Lingua Audire - " + SELECTED_LANGUAGE;
     }, []);
 
     function prepareClip() {
