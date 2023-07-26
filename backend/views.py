@@ -9,3 +9,7 @@ def index():
 @blueprint.route('/game/<path:text>')
 def game(text):
     return send_from_directory("../frontend/build", "index.html")
+
+@blueprint.route('/About/')
+def about():
+    return send_from_directory("../frontend/build", "index.html")
