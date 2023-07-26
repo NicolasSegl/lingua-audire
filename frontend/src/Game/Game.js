@@ -202,6 +202,14 @@ export default function Game() {
         }
     }
 
+    // this function enables the user to press enter/return to submit their answer (as opposed to having to click the "check" button)
+    function handleAnswerKeyDown(event) {
+        if (event.key === "Enter") {
+            handleCheckButtonClick();
+            event.preventDefault();
+        }
+    }
+
     if (lives >= 0) {
         return (
             <>
@@ -219,6 +227,7 @@ export default function Game() {
                             label="Answer" 
                             variant="outlined" 
                             disabled={submitted && "disabled"}
+                            onKeyDown={handleAnswerKeyDown}
                         />
 
                         {submitted && 
