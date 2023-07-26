@@ -248,13 +248,12 @@ export default function Game() {
                         </Stack>
                     </div>
                 </div>
-            </>
+            </ThemeProvider>
         );
     }
     else {
         return (
             <>
-                <NavBar />
                 <Gameover score={score} isNewHighScore={isNewHighScore} parentResetFunction={resetGame}/>
             </>
         );
