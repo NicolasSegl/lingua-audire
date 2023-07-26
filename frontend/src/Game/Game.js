@@ -213,7 +213,6 @@ export default function Game() {
     if (lives >= 0) {
         return (
             <>
-                <NavBar />
                 <div id="game-container">
                     <div id="menu-container">
                         <Stats score={score} highScore={highScore} lives={lives}/>

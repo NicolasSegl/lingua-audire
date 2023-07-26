@@ -1,0 +1,19 @@
+#about-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 300px;
+}
+
+#about-container p,
+#about-container h1,
+#about-container ul {
+    min-width: 300px;
+    width: 50%;
+    color: rgb(37, 37, 37);
+}
+
+#about-container li {
+    margin-top: 1%;
+}

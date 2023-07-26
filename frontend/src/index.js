@@ -5,8 +5,10 @@ import ReactDOM from 'react-dom/client';
 import './common/base.css';
 
 // page components
+import About from './About/About'
 import Game from './Game/Game'
 import Home from './Home/Home'
+import NavBar from './common/NavBar'
 import reportWebVitals from './reportWebVitals';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
@@ -25,6 +27,7 @@ function Main() {
 		<Routes>
 			<Route exact path='/' Component={Home}></Route>
 			<Route exact path='/game/*' Component={Game}></Route>
+			<Route exact path='/about/' Component={About}></Route>
 		</Routes>
 	);
 }
@@ -33,6 +36,7 @@ function App() {
 	return (
 		<div id="App">
 			<link rel="icon" type="image/x-icon" href="./favicon.ico" />
+			<NavBar />
 			<Main />
 			<Footer></Footer>
 		</div>

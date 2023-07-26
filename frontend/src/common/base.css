@@ -15,6 +15,7 @@ code {
 
 #NavBar {
 	display: flex;
+	gap: 2%;
 	padding: 1%;
 }
 
