@@ -40,7 +40,7 @@ code {
 
 #left-align-navbar {
 	display: flex;
-	gap: 2%;
+	gap: 5%;
 	flex-grow: 1;
 }
 
