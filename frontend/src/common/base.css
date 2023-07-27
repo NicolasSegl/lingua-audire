@@ -35,6 +35,7 @@ code {
 #right-align-navbar {
 	display: flex;
 	flex-grow: 1;
+	gap: 1%;
 	justify-content: flex-end;
 }
 

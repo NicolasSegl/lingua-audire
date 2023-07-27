@@ -12,7 +12,6 @@ import TextField from '@mui/material/TextField'
 // custom components
 import AudioPlayer from './AudioPlayer'
 import Gameover from './Gameover'
-import NavBar from '../common/NavBar'
 import Stats, { STARTING_LIVES } from './Stats'
 
 // utility functions
@@ -25,6 +24,9 @@ import { ThemeProvider } from '@mui/material/styles'
 let currentSentence  = "";
 let currentSentencePunctuation = "";
 let currentClipPath = "";
+
+let correctAudio   = new Audio("../../correct.mp3");
+let incorrectAudio = new Audio("../../incorrect.mp3");
 
 // the root component of the Game page
 export default function Game({ theme }) {
@@ -126,10 +128,19 @@ export default function Game({ theme }) {
                 // levenshtein distance, then we'll say that the user was correct
                 if (calcLevDistance(userAnswer, currentSentence) <= currentSentence.length / 15)
                 {
+                    // play the "correct" sound effect if the user has sound effects enabled
+                    if (getCookieValue("soundEffectsEnabled") != "false") {
+                        correctAudio.play();
+                    }
+                    
                     setSubmitColour("success");
                     setScore(score + 1);
                 }
                 else {
+                    // play the "incorrect" sound effect if the user has sound effects enabled
+                    if (getCookieValue("soundEffectsEnabled") != "false") {
+                        incorrectAudio.play();
+                    }
                     setLives(lives - 1);
                     setSubmitColour("error");
                 }
