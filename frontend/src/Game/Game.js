@@ -159,7 +159,7 @@ export default function Game({ theme }) {
 
             let highScore = getCookieValue("highscore");
 
-            if (highScore === '' || score > Number(highScore)) {
+            if ((highScore === '' && score > 0) || score > Number(highScore)) {
                 setHighScore(Number(score));
                 document.cookie = "highscore=" + score + "; expires=Tues, 1 Jan 2030 12:00:00 UTC; path=" + window.location.pathname;
                 setIsNewHighScore(true);
