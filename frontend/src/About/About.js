@@ -10,7 +10,7 @@ export default function About() {
     }, []);
 
     return (
-        <div id="about-container">
+        <div class="changes-theme" id="about-container">
             <h1>About Lingua Audire</h1>
             <p>Lingua Audire was conceived after a futile search for better resources on improving language listening skills. Although simple, Lingua Audire presents an excellent resource
                for helping language learners from all over the world improve their listening (and writing) skills in a practical, useful, and fun way.

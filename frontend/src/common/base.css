@@ -5,10 +5,19 @@ body {
     	sans-serif;
   	-webkit-font-smoothing: antialiased;
   	-moz-osx-font-smoothing: grayscale;
-  	background-color: whitesmoke;
+	background-color: var(--theme-background-colour);
 
 	display: flex;
 	flex-direction: column;
+}
+
+:root {
+	--theme-colour: whitesmoke;
+	--theme-background-colour: rgb(37, 37, 37);
+}
+
+.changes-theme {
+	color: var(--theme-colour);
 }
 
 code {
@@ -20,12 +29,24 @@ code {
 	display: flex;
 	gap: 2%;
 	padding: 1%;
+	align-items: center;
+}
+
+#right-align-navbar {
+	display: flex;
+	flex-grow: 1;
+	justify-content: flex-end;
+}
+
+#left-align-navbar {
+	display: flex;
+	gap: 2%;
+	flex-grow: 1;
 }
 
 #NavBar * {
 	font-weight: 600;
 	font-size: 20px;
-	color: rgb(37, 37, 37);
 	text-decoration: none;
 }
 
@@ -47,7 +68,6 @@ code {
 	font-size: 0.9em;
 	width: 33%;
 	margin-bottom: 3%;
-	color: rgb(182, 182, 182);
 	overflow-wrap: break-word; 
 }
 

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import ReactDOM from 'react-dom/client'
 
 // mui components
 import Button from '@mui/material/Button'
@@ -8,6 +7,10 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
 import Stack from '@mui/material/Stack'
+
+// for themes
+import { darkTheme, lightTheme } from '../common/themes'
+import { ThemeProvider } from '@mui/material/styles'
 
 // css
 import './Home.css'
@@ -66,7 +69,7 @@ function SelectMenu({ label, items, setFunction }) {
     );
 }
 
-export default function Home() {
+export default function Home({ theme }) {
     const [redirectLanguage, setRedirectLanguage] = useState("");
     const [redirectDifficulty, setRedirectDifficulty] = useState(-1);
 
@@ -77,9 +80,9 @@ export default function Home() {
     }
 
 	return (
-		<>
-			<h1 id="header">Lingua Audire</h1>
-            <div id="subheader-container">
+		<ThemeProvider theme={theme.theme === "light" ? lightTheme : darkTheme}>
+			<h1 className="changes-theme" id="header">Lingua Audire</h1>
+            <div className="changes-theme" id="subheader-container">
 			    <h3 id="subheader">Designed to improve language listening skills, Lingua Audire provides a way for users to audibly input in their target language.</h3>
             </div>
 
@@ -88,6 +91,6 @@ export default function Home() {
                 <SelectMenu items={SUPPORTED_DIFFICULTIES} setFunction={setRedirectDifficulty} label="Difficulty"/>
                 <Button variant="contained" onClick={handleStartGameClick}>Start Game</Button>
             </Stack>
-		</>
+		</ThemeProvider>
 	);
 };

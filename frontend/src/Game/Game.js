@@ -15,14 +15,19 @@ import Gameover from './Gameover'
 import NavBar from '../common/NavBar'
 import Stats, { STARTING_LIVES } from './Stats'
 
+// utility functions
 import { calcLevDistance, getCookieValue } from './util'
+
+// for themes
+import { darkTheme, lightTheme } from '../common/themes'
+import { ThemeProvider } from '@mui/material/styles'
 
 let currentSentence  = "";
 let currentSentencePunctuation = "";
 let currentClipPath = "";
 
 // the root component of the Game page
-export default function Game() {
+export default function Game({ theme }) {
     const [submitted, setSubmitted]           = useState(false);
     const [submitColour, setSubmitColour]     = useState("primary");
     const [score, setScore]                   = useState(0);
@@ -216,7 +221,7 @@ export default function Game() {
 
     if (lives >= 0) {
         return (
-            <>
+            <ThemeProvider theme={theme.theme === "light" ? lightTheme : darkTheme}>
                 <div id="game-container">
                     <div id="menu-container">
                         <Stats score={score} highScore={highScore} lives={lives}/>
@@ -234,7 +239,10 @@ export default function Game() {
                         />
 
                         {submitted && 
-                        <p id="correct-sentence">{submitColour === "success" ? "Correct!" : "Incorrect, the sentence was: " + currentSentencePunctuation}</p>
+                        <p className="changes-theme"
+                         id="correct-sentence">
+                        {submitColour === "success" ? "Correct!" : "Incorrect, the sentence was: " + currentSentencePunctuation}
+                        </p>
                         }
 
                         <Stack direction="row" id="difficulty-hint-stack">

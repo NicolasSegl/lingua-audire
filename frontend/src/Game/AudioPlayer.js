@@ -97,23 +97,23 @@ export default function AudioPlayer({ audioClip }) {
         <>
             <Stack spacing={1.5} direction="row" id="progress-bar">
                 <Tooltip title={isPaused ? "Play Audio" : "Pause Audio"} placement="top">
-                    <IconButton onClick={handlePlayButtonClick}>
+                    <IconButton className="changes-theme" onClick={handlePlayButtonClick}>
                         {isPaused ? <PlayArrow /> : <Pause />}
                     </IconButton>
                 </Tooltip>
-                <p>00:00</p>
+                <p className="changes-theme">00:00</p>
                 <Slider max={audioDuration} step={0.01} valueLabelDisplay="auto" value={time} onChange={handleTimeChange}/>
-                <p>{audioDuration / 60 < 10 & "0"}{Math.round(audioDuration / 60)}:{audioDuration % 60 < 10 & "0"}{Math.round(audioDuration % 60)}</p>
+                <p className="changes-theme">{audioDuration / 60 < 10 & "0"}{Math.round(audioDuration / 60)}:{audioDuration % 60 < 10 & "0"}{Math.round(audioDuration % 60)}</p>
             </Stack>
 
             <Stack spacing={1.5} direction="row" id="audio-player">
                 <Tooltip title="Playback Speed" placement="left">
-                    <SpeedIcon />
+                    <SpeedIcon className="changes-theme"/>
                 </Tooltip>
                 <Slider valueLabelDisplay="auto" min={0.25} max={2.0} step={0.25} value={playbackRate} onChange={handleplaybackRateChange}/>
 
                 <Tooltip title="Volume" placement="top">
-                    <VolumeUp />
+                    <VolumeUp className="changes-theme"/>
                 </Tooltip>
                 <Slider valueLabelDisplay="auto" value={volume} onChange={handleVolumeChange}/>
             </Stack>
