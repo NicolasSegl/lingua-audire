@@ -200,10 +200,12 @@ export default function Game({ theme }) {
 
             // if no words or just one word was fixed, give the user another word (if there is another word they need)
             if (fixedWordCount < 2 && userWords.length < sentenceWords.length) {
+                // the tertiary operators below are to ensure that we do not add a space to the text field before the 
+                // word we are giving the user IF that word would be the first word in the answer
                 if (userWords[0] == '') {
-                    document.getElementById("answer-input").value += " " + sentenceWords[userWords.length - 1];
+                    document.getElementById("answer-input").value += (userWords.length > 0 ? " " : "") + sentenceWords[userWords.length - 1];
                 } else {
-                    document.getElementById("answer-input").value += " " + sentenceWords[userWords.length];
+                    document.getElementById("answer-input").value += (userWords.length > 0 ? " " : "") + sentenceWords[userWords.length];
                 }
             }
 
