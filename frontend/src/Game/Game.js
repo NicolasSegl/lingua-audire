@@ -73,7 +73,7 @@ export default function Game({ theme }) {
             currentSentencePunctuation = response.data.sentence;
 
             // strip the sentence of all punctuation and capitlization, so that we can easily compare the user's answer with the sentence
-            currentSentence = currentSentencePunctuation.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+            currentSentence = currentSentencePunctuation.toLowerCase().replace(/[。，、「」『』〜！？（）【】｛｝・.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
         }).catch(error => {
         console.log(error)
         });
@@ -122,7 +122,7 @@ export default function Game({ theme }) {
                 setSubmitted(true);
 
                 let answerInput = document.getElementById("answer-input");
-                let userAnswer  = answerInput.value.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+                let userAnswer  = answerInput.value.toLowerCase().replace(/[。，、「」『』〜！？（）【】｛｝・.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
                 
                 // compare how close the user's answer is to the correct sentence. if they have a relatively close
                 // levenshtein distance, then we'll say that the user was correct
@@ -172,7 +172,13 @@ export default function Game({ theme }) {
         if (!hintButtonUsed) {
             // stores the words that the user has typed into the answer input in an array
             let userWords     = document.getElementById("answer-input").value.toLowerCase().split(" ");
-            let sentenceWords = currentSentence.split(" ");
+            let sentenceWords = "";
+            
+            if (SELECTED_LANGUAGE === "japanese") {
+                sentenceWords = currentSentence.split("");
+            } else {
+                sentenceWords = currentSentence.split(" ");
+            }
 
             // iterate over every word in the list of words the user has typed in
             // if we have to fix two words, then we will not give the user an extra word
