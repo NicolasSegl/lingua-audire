@@ -73,7 +73,7 @@ export default function Game({ theme }) {
             currentSentencePunctuation = response.data.sentence;
 
             // strip the sentence of all punctuation and capitlization, so that we can easily compare the user's answer with the sentence
-            currentSentence = currentSentencePunctuation.toLowerCase().replace(/[。，、「」『』〜！？（）【】｛｝・.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+            currentSentence = currentSentencePunctuation.toLowerCase().replace(/[。，、「」『』〜！？（）【】｛｝・.,\/#!$%\^&\*;:{}=\-—_`~()]/g, "");
         }).catch(error => {
         console.log(error)
         });
@@ -122,7 +122,7 @@ export default function Game({ theme }) {
                 setSubmitted(true);
 
                 let answerInput = document.getElementById("answer-input");
-                let userAnswer  = answerInput.value.toLowerCase().replace(/[。，、「」『』〜！？（）【】｛｝・.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+                let userAnswer  = answerInput.value.toLowerCase().replace(/[。，、「」『』〜！？（）【】｛｝・.,\/#!$%\^&\*;:{}=\-_`—~()]/g, "");
 
                 let levenshteinDistance = 15;
 

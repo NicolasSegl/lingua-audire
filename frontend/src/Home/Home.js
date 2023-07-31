@@ -23,6 +23,7 @@ const SUPPORTED_LANGUAGES = [
     "German",
     "Italian",
     "Japanese",
+    "Polish",
     "Russian",
     "Spanish",
 ];
