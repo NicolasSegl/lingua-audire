@@ -123,10 +123,16 @@ export default function Game({ theme }) {
 
                 let answerInput = document.getElementById("answer-input");
                 let userAnswer  = answerInput.value.toLowerCase().replace(/[。，、「」『』〜！？（）【】｛｝・.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+
+                let levenshteinDistance = 15;
+
+                if (SELECTED_LANGUAGE === "japanese") {
+                    levenshteinDistance = 5;
+                }
                 
                 // compare how close the user's answer is to the correct sentence. if they have a relatively close
                 // levenshtein distance, then we'll say that the user was correct
-                if (calcLevDistance(userAnswer, currentSentence) <= currentSentence.length / 15)
+                if (calcLevDistance(userAnswer, currentSentence) <= currentSentence.length / levenshteinDistance)
                 {
                     // play the "correct" sound effect if the user has sound effects enabled
                     if (getCookieValue("soundEffectsEnabled") != "false") {
