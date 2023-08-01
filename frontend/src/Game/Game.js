@@ -175,7 +175,8 @@ export default function Game({ theme }) {
 
     function handleHintButtonClick() {
         // only allow the hint button to be used if it has not yet been used this clip
-        if (!hintButtonUsed) {
+        // and only if the audio clip has been loaded in
+        if (!hintButtonUsed && !isNaN(audioClip.duration)) {
             // stores the words that the user has typed into the answer input in an array
             let userWords     = document.getElementById("answer-input").value.toLowerCase().split(" ");
             let sentenceWords = "";
