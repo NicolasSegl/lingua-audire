@@ -30,6 +30,14 @@ const SUPPORTED_LANGUAGES = [
 
 const SUPPORTED_DIFFICULTIES = ["Easy", "Medium", "Hard", "Very Hard"];
 
+const menuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: 250,
+        }
+    }
+}
+
 function SelectMenu({ label, items, setFunction }) {
     const [selectedValue, setSelectedValue] = useState("");
 
@@ -58,6 +66,7 @@ function SelectMenu({ label, items, setFunction }) {
                     value={selectedValue}
                     label={label}
                     onChange={handleChange}
+                    MenuProps={menuProps}
                 >
                     {items.map((value) => (
                         <MenuItem key={value} value={value}>
