@@ -1,17 +1,10 @@
 .git
 .gitignore
 .dockerignore
-/languages/arabic
 /languages/bengali
 /languages/cantonese
-/languages/hindi
 /languages/indonesian
 /languages/irish
-/languages/japanese
 /languages/mandarin
-/languages/polish
-/languages/portuguese
-/languages/swedish
 /languages/tamil
-/languages/turkish
 /languages/urdu

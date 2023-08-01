@@ -17,6 +17,11 @@ import './Home.css'
 
 // an array with all the supported languages
 const SUPPORTED_LANGUAGES = [
+    "Arabic",
+    "Hindi",
+    "Portugeuse",
+    "Swedish",
+    "Turkish",
     "Danish",
     "English",
     "French",
@@ -26,7 +31,7 @@ const SUPPORTED_LANGUAGES = [
     "Polish",
     "Russian",
     "Spanish",
-];
+].sort();
 
 const SUPPORTED_DIFFICULTIES = ["Easy", "Medium", "Hard", "Very Hard"];
 
