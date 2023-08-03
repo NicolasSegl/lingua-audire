@@ -55,7 +55,7 @@ function getNextClip(language, difficulty) {
         nextSentencePunctuation = response.data.sentence;
 
         // strip the sentence of all punctuation and capitlization, so that we can easily compare the user's answer with the sentence
-        nextSentence = currentSentencePunctuation.toLowerCase().trim().replace(/[؍۔※。”“、؛،．؟|–《…》〈〉⸺。，、「」『』〜！？（）【】｛｝・.,\/#!$%\^&\*;:{}=\-—_`~()]/g, "");
+        nextSentence = nextSentencePunctuation.toLowerCase().trim().replace(/[؍۔※。”“、؛،．؟|–《…》〈〉⸺。，、「」『』〜！？（）【】｛｝・.,\/#!$%\^&\*;:{}=\-—_`~()]/g, "");
     }).catch(error => {
         console.log(error)
     });

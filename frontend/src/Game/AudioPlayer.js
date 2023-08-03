@@ -70,7 +70,6 @@ export default function AudioPlayer({ audioClip }) {
                 {
                     setTime(Math.round(audioClip.currentTime * 10) / 10);
                     if (audioClip.currentTime == audioClip.duration) {
-                        console.log(repeat);
                         if (!clipRepeat) {
                             setIsPaused(true); 
                         } else {
