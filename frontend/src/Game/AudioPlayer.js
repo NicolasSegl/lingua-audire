@@ -75,6 +75,7 @@ export default function AudioPlayer({ audioClip }) {
                         } else {
                             audioClip.currentTime = 0;
                             audioClip.play();
+                            setIsPaused(false);
                         }
                     }
                 }
@@ -88,6 +89,7 @@ export default function AudioPlayer({ audioClip }) {
                 audioClip.volume = volume / 100;
                 audioClip.playbackRate = playbackRate;
                 audioClip.play();
+                setIsPaused(false);
             };
         });
 
