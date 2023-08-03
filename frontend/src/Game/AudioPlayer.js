@@ -91,7 +91,7 @@ export default function AudioPlayer({ audioClip }) {
             setAudioDuration(0);
             setTime(0);
         }
-    });
+    }, [audioClip]);
 
     return (
         <>
