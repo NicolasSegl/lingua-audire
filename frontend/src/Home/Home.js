@@ -19,7 +19,7 @@ import './Home.css'
 const SUPPORTED_LANGUAGES = [
     "Arabic",
     "Hindi",
-    "Portugeuse",
+    "Portuguese",
     "Swedish",
     "Turkish",
     "Danish",
