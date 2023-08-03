@@ -19,7 +19,7 @@ import { calcLevDistance, getCookieValue } from './util'
 
 // for themes
 import { darkTheme, lightTheme } from '../common/themes'
-import { ThemeProvider } from '@mui/material/styles'
+import { ThemeProvider, createTheme } from '@mui/material/styles'
 
 let currentSentence  = "";
 let currentSentencePunctuation = "";
@@ -27,6 +27,23 @@ let currentClipPath = "";
 
 let correctAudio   = new Audio("../../correct.mp3");
 let incorrectAudio = new Audio("../../incorrect.mp3");
+
+const ACCENT_BUTTON_THEME = createTheme({
+    shape: {
+        borderRadius: 8,
+    },
+});
+
+const ACCENTS = {
+    "portuguese": "àáãâéêíóôõúüç",
+    "polish": "ąćęłńóśźż",
+    "german": "äöüß",
+    "danish": "æøå",
+    "swedish": "åäö",
+    "french": "âàçêéèëîïôùûü",
+    "spanish": "áéíñóúü",
+    "turkish": "çğıöşü"
+}
 
 // the root component of the Game page
 export default function Game({ theme }) {
@@ -39,6 +56,7 @@ export default function Game({ theme }) {
     const [audioClip, setAudioClip]           = useState(new Audio());
     const [hintButtonUsed, setHintButtonUsed] = useState(false);
     const [isClipReported, setClipReported]   = useState(false);
+    const [accentButtons, setAccentButtons]   = useState([]);
 
     // used for sending GET requests to the server
     // the second parameter in the array generated below will be the language, and the third will be the difficulty
@@ -229,7 +247,6 @@ export default function Game({ theme }) {
     function handleReportbuttonClicked() {
         // only allow the report button to be used if it has not yet been used this clip
         if (!isClipReported) {
-            console.log(currentClipPath);
             // send a post request to the backend to handle the report
             axios.post("https://lingua-audire-owxddexg4q-ue.a.run.app/reportClip", { path: currentClipPath });
 
@@ -243,6 +260,10 @@ export default function Game({ theme }) {
             handleCheckButtonClick();
             event.preventDefault();
         }
+    }
+
+    function handleAccentButtonClick(character) {
+        document.getElementById("answer-input").value += character;
     }
 
     if (lives >= 0) {
@@ -270,6 +291,13 @@ export default function Game({ theme }) {
                         {submitColour === "success" ? "Correct!" : "Incorrect, the sentence was: " + currentSentencePunctuation}
                         </p>
                         }
+
+                        <Stack direction="row" id="accents-stack">
+                            {SELECTED_LANGUAGE in ACCENTS && ACCENTS[SELECTED_LANGUAGE].split("").map((character) => (
+                                <Button style={{textTransform: "none"}} onClick={() => handleAccentButtonClick(character)}>{character}</Button>
+                            )
+                            )}
+                        </Stack>
 
                         <Stack direction="row" id="difficulty-hint-stack">
                             {

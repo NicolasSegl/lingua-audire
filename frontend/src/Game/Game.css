@@ -19,6 +19,18 @@
     justify-content: center;
 }
 
+#accents-stack {
+    display: flex;
+    justify-content: center;
+}
+
+#accents-stack * {
+    border-radius: 16px;
+    min-width: 25px;
+    max-width: 100px;
+    flex-grow: 1;
+}
+
 #menu-container {
     width: 45%;
     display: flex;
