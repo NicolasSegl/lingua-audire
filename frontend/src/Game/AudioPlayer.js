@@ -27,7 +27,7 @@ export default function AudioPlayer({ audioClip }) {
     const [audioDuration, setAudioDuration] = useState(0);
     const [intervalID, setIntervalID]       = useState(null);
     const [isPaused, setIsPaused]           = useState(true);
-    const [repeat, setRepeat]               = useState(false);
+    const [repeat, setRepeat]               = useState(clipRepeat);
 
     function handlePlayButtonClick() {
         // only allow the play/pause button to be pressed if the audio clip has been loaded (meaning it has 
