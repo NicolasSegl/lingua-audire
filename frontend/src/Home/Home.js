@@ -15,6 +15,8 @@ import { ThemeProvider } from '@mui/material/styles'
 // css
 import './Home.css'
 
+import { getCookieValue } from '../Game/util'
+
 // an array with all the supported languages
 const SUPPORTED_LANGUAGES = [
     "Arabic",
@@ -43,8 +45,21 @@ const menuProps = {
     }
 }
 
-function SelectMenu({ label, items, setFunction }) {
-    const [selectedValue, setSelectedValue] = useState("");
+// for converting difficulty names to their respective numbers
+function convertDifficultyToString(string) {
+    if (string == 1) {
+        return "Easy";
+    } else if (string == 2) {
+        return "Medium";
+    } else if (string == 3) {
+        return "Hard";
+    } else if (string == 4) {
+        return "Very Hard";
+    }
+}
+
+function SelectMenu({ label, items, setFunction, defaultValue }) {
+    const [selectedValue, setSelectedValue] = useState(defaultValue);
 
     function handleChange(event) {
         // for converting difficulty names to their respective numbers
@@ -86,10 +101,13 @@ function SelectMenu({ label, items, setFunction }) {
 }
 
 export default function Home({ theme }) {
-    const [redirectLanguage, setRedirectLanguage] = useState("");
-    const [redirectDifficulty, setRedirectDifficulty] = useState(-1);
+    const [redirectLanguage, setRedirectLanguage]     = useState(getCookieValue("selectedListenLanguage"));
+    const [redirectDifficulty, setRedirectDifficulty] = useState(getCookieValue("selectedListenDifficulty"));
 
     function handleStartGameClick() {
+        document.cookie = "selectedListenLanguage=" + redirectLanguage + "; expires=Tues, 1 Jan 2030 12:00:00 UTC; path=" + window.location.pathname;
+        document.cookie = "selectedListenDifficulty=" + redirectDifficulty + "; expires=Tues, 1 Jan 2030 12:00:00 UTC; path=" + window.location.pathname;
+
         if (redirectLanguage && redirectDifficulty > 0) {
             window.location.href='/game/' + redirectLanguage + "/" + redirectDifficulty;
         }
@@ -103,8 +121,8 @@ export default function Home({ theme }) {
             </div>
 
             <Stack id="start-game-stack" direction="row" spacing={5}>
-                <SelectMenu items={SUPPORTED_LANGUAGES} setFunction={setRedirectLanguage} label="Language"/>
-                <SelectMenu items={SUPPORTED_DIFFICULTIES} setFunction={setRedirectDifficulty} label="Difficulty"/>
+                <SelectMenu items={SUPPORTED_LANGUAGES} setFunction={setRedirectLanguage} defaultValue={getCookieValue("selectedListenLanguage")} label="Language"/>
+                <SelectMenu items={SUPPORTED_DIFFICULTIES} setFunction={setRedirectDifficulty} defaultValue={convertDifficultyToString(getCookieValue("selectedListenDifficulty"))} label="Difficulty"/>
                 <Button variant="contained" onClick={handleStartGameClick}>Start Game</Button>
             </Stack>
 		</ThemeProvider>
