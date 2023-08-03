@@ -35,11 +35,6 @@ let nextAudioClipData       = "";
 let correctAudio   = new Audio("../../correct.mp3");
 let incorrectAudio = new Audio("../../incorrect.mp3");
 
-// used for sending GET requests to the server[]
-// the second parameter in the array generated below will be the language, and the third will be the difficulty
-const SELECTED_LANGUAGE = window.location.pathname.split("/")[2].toLowerCase();
-const SELECTED_DIFFICULTY = window.location.pathname.split("/")[3];
-
 const ACCENTS = {
     "portuguese": "àáãâéêíóôõúüç",
     "polish": "ąćęłńóśźż",
@@ -51,8 +46,8 @@ const ACCENTS = {
     "turkish": "çğıöşü"
 }
 
-function getNextClip() {
-    axios.get('https://lingua-audire-owxddexg4q-ue.a.run.app/getClip', { params: { language: SELECTED_LANGUAGE, difficulty: SELECTED_DIFFICULTY} }).then(response => {
+function getNextClip(language, difficulty) {
+    axios.get('https://lingua-audire-owxddexg4q-ue.a.run.app/getClip', { params: { language: language, difficulty: difficulty} }).then(response => {
         // instantiate an audio object using the base64 encoded string of the audio file's raw data as retrieved from the server
         nextAudioClipData = "data:audio/mp3;base64," + response.data.audioData;
         
@@ -78,6 +73,11 @@ export default function Game({ theme }) {
     const [hintButtonUsed, setHintButtonUsed] = useState(false);
     const [isClipReported, setClipReported]   = useState(false);
 
+    // used for sending GET requests to the server[]
+    // the second parameter in the array generated below will be the language, and the third will be the difficulty
+    const SELECTED_LANGUAGE = window.location.pathname.split("/")[2].toLowerCase();
+    const SELECTED_DIFFICULTY = window.location.pathname.split("/")[3];
+
     // to be called upon the game being over (should the user decide to restart the game)
     // it simply resets some of the above values to their origianl states
     function resetGame() {
@@ -102,7 +102,7 @@ export default function Game({ theme }) {
             currentClipPath = nextClipPath;
             currentSentence = nextSentence;
             currentSentencePunctuation = nextSentencePunctuation;
-            getNextClip();
+            getNextClip(SELECTED_LANGUAGE, SELECTED_DIFFICULTY);
         } else {
 
             // this will prevent the previous audio clip's data from preserving until a new audio clip has been fetched
@@ -123,7 +123,7 @@ export default function Game({ theme }) {
             });
 
             // after the current clip has been fetched, fetch the next clip as well (so it's ready immediately)
-            getNextClip();
+            getNextClip(SELECTED_LANGUAGE, SELECTED_DIFFICULTY);
         }
     }
 
