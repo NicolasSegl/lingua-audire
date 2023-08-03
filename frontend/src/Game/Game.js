@@ -21,18 +21,24 @@ import { calcLevDistance, getCookieValue } from './util'
 import { darkTheme, lightTheme } from '../common/themes'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 
-let currentSentence  = "";
+// for storing data about the audio clip that the user is currently listening to
+let currentSentence            = "";
 let currentSentencePunctuation = "";
-let currentClipPath = "";
+let currentClipPath            = "";
+
+// for storing data about the audio clip that the user will listen to after the currently playing clip
+let nextSentence            = "";
+let nextSentencePunctuation = "";
+let nextClipPath            = "";
+let nextAudioClipData       = "";
 
 let correctAudio   = new Audio("../../correct.mp3");
 let incorrectAudio = new Audio("../../incorrect.mp3");
 
-const ACCENT_BUTTON_THEME = createTheme({
-    shape: {
-        borderRadius: 8,
-    },
-});
+// used for sending GET requests to the server[]
+// the second parameter in the array generated below will be the language, and the third will be the difficulty
+const SELECTED_LANGUAGE = window.location.pathname.split("/")[2].toLowerCase();
+const SELECTED_DIFFICULTY = window.location.pathname.split("/")[3];
 
 const ACCENTS = {
     "portuguese": "àáãâéêíóôõúüç",
@@ -43,6 +49,21 @@ const ACCENTS = {
     "french": "âàçêéèëîïôùûü",
     "spanish": "áéíñóúü",
     "turkish": "çğıöşü"
+}
+
+function getNextClip() {
+    axios.get('https://lingua-audire-owxddexg4q-ue.a.run.app/getClip', { params: { language: SELECTED_LANGUAGE, difficulty: SELECTED_DIFFICULTY} }).then(response => {
+        // instantiate an audio object using the base64 encoded string of the audio file's raw data as retrieved from the server
+        nextAudioClipData = "data:audio/mp3;base64," + response.data.audioData;
+        
+        nextClipPath = response.data.path;
+        nextSentencePunctuation = response.data.sentence;
+
+        // strip the sentence of all punctuation and capitlization, so that we can easily compare the user's answer with the sentence
+        nextSentence = currentSentencePunctuation.toLowerCase().trim().replace(/[؍۔※。”“、؛،．؟|–《…》〈〉⸺。，、「」『』〜！？（）【】｛｝・.,\/#!$%\^&\*;:{}=\-—_`~()]/g, "");
+    }).catch(error => {
+        console.log(error)
+    });
 }
 
 // the root component of the Game page
@@ -56,12 +77,6 @@ export default function Game({ theme }) {
     const [audioClip, setAudioClip]           = useState(new Audio());
     const [hintButtonUsed, setHintButtonUsed] = useState(false);
     const [isClipReported, setClipReported]   = useState(false);
-    const [accentButtons, setAccentButtons]   = useState([]);
-
-    // used for sending GET requests to the server
-    // the second parameter in the array generated below will be the language, and the third will be the difficulty
-    const SELECTED_LANGUAGE = window.location.pathname.split("/")[2].toLowerCase();
-    const SELECTED_DIFFICULTY = window.location.pathname.split("/")[3];
 
     // to be called upon the game being over (should the user decide to restart the game)
     // it simply resets some of the above values to their origianl states
@@ -80,21 +95,36 @@ export default function Game({ theme }) {
         // if there is an audio clip currently playing, have it pause 
         audioClip.pause();
 
-        // this will prevent the previous audio clip's data from preserving until a new audio clip has been fetched
-        setAudioClip(new Audio());
+        // if we have already loaded the next audio clip into a buffer, then we can
+        // immediately load the next clip (without first having to wait to fetch from the server)
+        if (nextAudioClipData) {
+            setAudioClip(new Audio(nextAudioClipData));
+            currentClipPath = nextClipPath;
+            currentSentence = nextSentence;
+            currentSentencePunctuation = nextSentencePunctuation;
+            getNextClip();
+        } else {
 
-        axios.get('https://lingua-audire-owxddexg4q-ue.a.run.app/getClip', { params: { language: SELECTED_LANGUAGE, difficulty: SELECTED_DIFFICULTY} }).then(response => {
-            // instantiate an audio object using the base64 encoded string of the audio file's raw data as retrieved from the server
-            setAudioClip(new Audio("data:audio/mp3;base64," + response.data.audioData));
-            
-            currentClipPath = response.data.path;
-            currentSentencePunctuation = response.data.sentence;
+            // this will prevent the previous audio clip's data from preserving until a new audio clip has been fetched
+            setAudioClip(new Audio());
 
-            // strip the sentence of all punctuation and capitlization, so that we can easily compare the user's answer with the sentence
-            currentSentence = currentSentencePunctuation.toLowerCase().trim().replace(/[؍۔※。”“、؛،．؟|–《…》〈〉⸺。，、「」『』〜！？（）【】｛｝・.,\/#!$%\^&\*;:{}=\-—_`~()]/g, "");
-        }).catch(error => {
-        console.log(error)
-        });
+            // fetch a clip from the server to use immediately
+            axios.get('https://lingua-audire-owxddexg4q-ue.a.run.app/getClip', { params: { language: SELECTED_LANGUAGE, difficulty: SELECTED_DIFFICULTY} }).then(response => {
+                // instantiate an audio object using the base64 encoded string of the audio file's raw data as retrieved from the server
+                setAudioClip(new Audio("data:audio/mp3;base64," + response.data.audioData));
+                
+                currentClipPath = response.data.path;
+                currentSentencePunctuation = response.data.sentence;
+
+                // strip the sentence of all punctuation and capitlization, so that we can easily compare the user's answer with the sentence
+                currentSentence = currentSentencePunctuation.toLowerCase().trim().replace(/[؍۔※。”“、؛،．؟|–《…》〈〉⸺。，、「」『』〜！？（）【】｛｝・.,\/#!$%\^&\*;:{}=\-—_`~()]/g, "");
+            }).catch(error => {
+                console.log(error)
+            });
+
+            // after the current clip has been fetched, fetch the next clip as well (so it's ready immediately)
+            getNextClip();
+        }
     }
 
     // immediately get a clip from the server upon the game interface loading
