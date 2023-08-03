@@ -9,6 +9,8 @@ import Tooltip from '@mui/material/Tooltip'
 // mui icons
 import Pause from '@mui/icons-material/Pause'
 import PlayArrow from '@mui/icons-material/PlayArrow'
+import RepeatIcon from '@mui/icons-material/Repeat'
+import RepeatOnIcon from '@mui/icons-material/RepeatOn'
 import SpeedIcon from '@mui/icons-material/Speed'
 import VolumeUp from '@mui/icons-material/VolumeUp'
 
@@ -16,13 +18,16 @@ import VolumeUp from '@mui/icons-material/VolumeUp'
 const STARTING_VOLUME = 100;
 const STARTING_PLAYBACK_RATE = 1;
 
+let clipRepeat = false;
+
 export default function AudioPlayer({ audioClip }) {
-    const [volume, setVolume] = useState(STARTING_VOLUME);
-    const [playbackRate, setPlaybackRate] = useState(STARTING_PLAYBACK_RATE);
-    const [time, setTime] = useState(0);
+    const [volume, setVolume]               = useState(STARTING_VOLUME);
+    const [playbackRate, setPlaybackRate]   = useState(STARTING_PLAYBACK_RATE);
+    const [time, setTime]                   = useState(0);
     const [audioDuration, setAudioDuration] = useState(0);
-    const [intervalID, setIntervalID] = useState(null);
-    const [isPaused, setIsPaused] = useState(true);
+    const [intervalID, setIntervalID]       = useState(null);
+    const [isPaused, setIsPaused]           = useState(true);
+    const [repeat, setRepeat]               = useState(false);
 
     function handlePlayButtonClick() {
         // only allow the play/pause button to be pressed if the audio clip has been loaded (meaning it has 
@@ -65,7 +70,13 @@ export default function AudioPlayer({ audioClip }) {
                 {
                     setTime(Math.round(audioClip.currentTime * 10) / 10);
                     if (audioClip.currentTime == audioClip.duration) {
-                        setIsPaused(true);
+                        console.log(repeat);
+                        if (!clipRepeat) {
+                            setIsPaused(true); 
+                        } else {
+                            audioClip.currentTime = 0;
+                            audioClip.play();
+                        }
                     }
                 }
             }, 100));
@@ -93,6 +104,11 @@ export default function AudioPlayer({ audioClip }) {
         }
     }, [audioClip]);
 
+    function handleRepeatButtonClick() {
+        clipRepeat = !clipRepeat;
+        setRepeat(!repeat);
+    }
+
     return (
         <>
             <Stack spacing={1.5} direction="row" id="progress-bar">
@@ -104,6 +120,11 @@ export default function AudioPlayer({ audioClip }) {
                 <p className="changes-theme">00:00</p>
                 <Slider max={audioDuration} step={0.01} valueLabelDisplay="auto" value={time} onChange={handleTimeChange}/>
                 <p className="changes-theme">{audioDuration / 60 < 10 & "0"}{Math.round(audioDuration / 60)}:{audioDuration % 60 < 10 & "0"}{Math.round(audioDuration % 60)}</p>
+                <Tooltip title={"Toggle Clip Looping: " + (repeat ? "On" : "Off")} placement="top">
+                    <IconButton className="changes-theme" onClick={handleRepeatButtonClick}>
+                        {repeat ? <RepeatOnIcon /> : <RepeatIcon />}
+                    </IconButton>
+                </Tooltip>
             </Stack>
 
             <Stack spacing={1.5} direction="row" id="audio-player">
