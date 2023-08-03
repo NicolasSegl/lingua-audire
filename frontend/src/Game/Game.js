@@ -204,9 +204,10 @@ export default function Game({ theme }) {
                 // upon clicking next again, the game will be over
                 if (lives == 0) {
                     setLives(lives - 1);
+                    audioClip.pause();
                 }
                 else {
-                    // if there are enough lives remaining for hte player, get the next clip from the server
+                    // if there are enough lives remaining for the player, get the next clip from the server
                     prepareClip();
                 }
             }
@@ -228,7 +229,7 @@ export default function Game({ theme }) {
             // stores the words that the user has typed into the answer input in an array
             let userWords     = document.getElementById("answer-input").value.toLowerCase().split(" ");
             let sentenceWords = "";
-            
+
             if (SELECTED_LANGUAGE === "japanese") {
                 sentenceWords = currentSentence.split("");
             } else {
