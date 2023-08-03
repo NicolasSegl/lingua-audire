@@ -160,7 +160,7 @@ export default function Game({ theme }) {
         setHintButtonUsed(false);
 
         // allow the report button to be used again
-        setHintButtonUsed(false);
+        setClipReported(false);
     }
     
     function handleCheckButtonClick() {
