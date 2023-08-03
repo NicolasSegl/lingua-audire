@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 // mui components
 import Button from "@mui/material/Button"
 import IconButton from '@mui/material/IconButton'
+import { Tooltip } from '@mui/material'
 
 // mui icons
 import VolumeUp from '@mui/icons-material/VolumeUp'
@@ -29,9 +30,11 @@ export default function NavBar({ changedThemeFunction, theme }) {
 				<a className="changes-theme" href="/About/">About</a>
 			</div>
 			<div id="right-align-navbar">
-				<IconButton onClick={onSoundEffectsToggleClick}>
-					{getCookieValue("soundEffectsEnabled") != "false" ? <VolumeUp className="changes-theme" /> : <VolumeOff className="changes-theme" />}
-				</IconButton>
+				<Tooltip title="Toggle Sound Effects" placement="bottom">
+					<IconButton onClick={onSoundEffectsToggleClick}>
+						{getCookieValue("soundEffectsEnabled") != "false" ? <VolumeUp className="changes-theme" /> : <VolumeOff className="changes-theme" />}
+					</IconButton>
+				</Tooltip>
 				<ThemeProvider theme={theme === "light" ? buttonLightTheme : buttonDarkTheme}>
 					<Button onClick={changedThemeFunction} style={{textTransform: "none"}}>{theme === "light" ? "Light" : "Dark"} Mode</Button>
 				</ThemeProvider>
