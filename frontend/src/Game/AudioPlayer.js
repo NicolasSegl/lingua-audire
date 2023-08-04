@@ -57,6 +57,7 @@ export default function AudioPlayer({ audioClip }) {
         setTime(newTime);
         audioClip.currentTime = newTime;
         audioClip.pause();
+        setIsPaused(true);
     }
 
     // this effect will have its callback called everytime a new audio clip is fetched from the server
