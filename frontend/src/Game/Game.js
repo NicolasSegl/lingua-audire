@@ -314,6 +314,7 @@ export default function Game({ theme }) {
                             variant="outlined" 
                             disabled={submitted && "disabled"}
                             onKeyDown={handleAnswerKeyDown}
+                            inputRef={input => input && input.focus()}
                         />
 
                         {submitted && 
