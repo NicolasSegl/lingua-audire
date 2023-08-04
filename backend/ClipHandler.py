@@ -22,13 +22,13 @@ class ClipHandler(Resource):
 		difficultyLower  = 0
 
 		# defines the upper boundary for the requested clip's difficulty (assuming a default difficulty of 1/easy)
-		difficultyUpper = 12
+		difficultyUpper = 9
 
 		if difficulty == 2: # medium difficulty
-			difficultyLower = 13
-			difficultyUpper = 40
+			difficultyLower = 10
+			difficultyUpper = 25
 		elif difficulty == 3: # hard difficulty
-			difficultyLower = 41
+			difficultyLower = 26
 			difficultyUpper = 100
 		elif difficulty >= 4: # very hard difficulty (or the user has typed into the url their own difficulty)
 			difficultyLower = 101
