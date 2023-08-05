@@ -14,7 +14,6 @@
 
 #game-container {
     height: 100%;
-
     display: flex;
     justify-content: center;
 }
@@ -69,5 +68,11 @@
 @media only screen and (max-width: 600px) {
     #menu-container {
         width: 90%;
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 1100px) {
+    #menu-container {
+        width: 70%;
     }
 }
