@@ -72,6 +72,7 @@ export default function Game({ theme }) {
     const [audioClip, setAudioClip]           = useState(new Audio());
     const [hintButtonUsed, setHintButtonUsed] = useState(false);
     const [isClipReported, setClipReported]   = useState(false);
+    const [isLoading, setIsLoading]           = useState(true);
 
     // used for sending GET requests to the server[]
     // the second parameter in the array generated below will be the language, and the third will be the difficulty
@@ -115,6 +116,7 @@ export default function Game({ theme }) {
                 
                 currentClipPath = response.data.path;
                 currentSentencePunctuation = response.data.sentence;
+                setIsLoading(false);
 
                 // strip the sentence of all punctuation and capitlization, so that we can easily compare the user's answer with the sentence
                 currentSentence = currentSentencePunctuation.toLowerCase().trim().replace(/[؍۔※。”“、؛،．؟|–《…》〈〉⸺。，、「」『』〜！？（）【】｛｝・.,\/#!$%\^&\*;:{}=\-?—_`~()]/g, "");
@@ -297,7 +299,10 @@ export default function Game({ theme }) {
         document.getElementById("answer-input").value += character;
     }
 
-    if (lives >= 0) {
+    if (isLoading){
+        return (<h3 id="loading-text" className="changes-theme">Loading...</h3>);
+    } 
+    else if (lives >= 0) {
         return (
             <ThemeProvider theme={theme.theme === "light" ? lightTheme : darkTheme}>
                 <div id="game-container">
