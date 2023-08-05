@@ -320,7 +320,7 @@ export default function Game({ theme }) {
                         {submitted && 
                         <p className="changes-theme"
                          id="correct-sentence">
-                        {submitColour === "success" ? "Correct!" : "Incorrect, the sentence was: " + currentSentencePunctuation}
+                        {submitColour === "success" ? "Correct, the sentence was: " + currentSentencePunctuation : "Incorrect, the sentence was: " + currentSentencePunctuation}
                         </p>
                         }
 
