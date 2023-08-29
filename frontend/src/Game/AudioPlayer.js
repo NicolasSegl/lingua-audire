@@ -89,8 +89,9 @@ export default function AudioPlayer({ audioClip }) {
                 setAudioDuration(audioClip.duration);
                 audioClip.volume = volume / 100;
                 audioClip.playbackRate = playbackRate;
-                audioClip.play();
-                setIsPaused(false);
+                if (audioClip.play()) {
+                    setIsPaused(false);
+                }
             };
         });
 
