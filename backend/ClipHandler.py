@@ -22,20 +22,20 @@ class ClipHandler(Resource):
 		difficultyLower  = 0
 
 		# defines the upper boundary for the requested clip's difficulty (assuming a default difficulty of 1/easy)
-		difficultyUpper = 12
+		difficultyUpper = 9
 
 		if difficulty == 2: # medium difficulty
-			difficultyLower = 13
-			difficultyUpper = 40
+			difficultyLower = 10
+			difficultyUpper = 25
 		elif difficulty == 3: # hard difficulty
-			difficultyLower = 41
+			difficultyLower = 26
 			difficultyUpper = 100
 		elif difficulty >= 4: # very hard difficulty (or the user has typed into the url their own difficulty)
 			difficultyLower = 101
 			difficultyUpper = 9999
 
 		try:
-			cursor.execute(f"SELECT * FROM clip WHERE clip.language = \"{language}\" AND clip.difficulty < {difficultyUpper} AND clip.difficulty > {difficultyLower} ORDER BY RAND () LIMIT 1")
+			cursor.execute("SELECT * FROM clip WHERE clip.language = %s AND clip.difficulty < %s AND clip.difficulty > %s ORDER BY RAND () LIMIT 1", (language, difficultyUpper, difficultyLower))
 		except:
 			cursor.close()
 			return

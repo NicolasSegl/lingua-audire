@@ -1,5 +1,12 @@
 # Lingua Audire
-A site designed to help users improve their language listening skills by having them attempt to accurately answer what words were in a spoken sentence.
+A site designed to help users improve their language listening skills by having them transcribe spoken sentences in their target language.
+
+## Sceenshots
+![alt text](image.png)
+
+![alt text](image-1.png)
+
+![alt text](image-2.png)
 
 ## Docker
 Lingua Audire makes use of containerization with docker, making testing and deployment of the site a breeze.

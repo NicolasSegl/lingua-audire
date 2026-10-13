@@ -57,6 +57,7 @@ export default function AudioPlayer({ audioClip }) {
         setTime(newTime);
         audioClip.currentTime = newTime;
         audioClip.pause();
+        setIsPaused(true);
     }
 
     // this effect will have its callback called everytime a new audio clip is fetched from the server
@@ -88,8 +89,6 @@ export default function AudioPlayer({ audioClip }) {
                 setAudioDuration(audioClip.duration);
                 audioClip.volume = volume / 100;
                 audioClip.playbackRate = playbackRate;
-                audioClip.play();
-                setIsPaused(false);
             };
         });
 
