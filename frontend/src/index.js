@@ -9,6 +9,8 @@ import About from './About/About'
 import Game from './Game/Game'
 import Home from './Home/Home'
 import NavBar from './common/NavBar'
+import SpeechGame from './Speech/Speech';
+
 import reportWebVitals from './reportWebVitals';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
@@ -19,7 +21,6 @@ function Footer() {
 	return (
 		<div className="changes-theme" id="Footer">
 			<p>A feature you would like added to the site? A bug you would like to report? Send an email to: linguaaudire@gmail.com</p>
-			<p>Any support for the upkeep and further development of the site is greatly appreciated. If you would like to make a small donation, you can do so at: <a href="https://www.buymeacoffee.com/linguaaudire">https://www.buymeacoffee.com/linguaaudire</a></p>
 		</div>
 	);
 }
@@ -30,6 +31,7 @@ function Main(theme) {
 			<Route exact path='/' element={<Home theme={theme}/>}></Route>
 			<Route exact path='/game/*' element={<Game theme={theme}/>}></Route>
 			<Route exact path='/about/' element={<About />}></Route>
+			<Route exact path='/speech/' element={<SpeechGame />}></Route>
 		</Routes>
 	);
 }

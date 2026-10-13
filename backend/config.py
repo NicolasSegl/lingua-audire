@@ -1,3 +1,4 @@
+import os
 import uuid
 
 class Config():
@@ -13,5 +14,6 @@ class prodConfig(Config):
     # MYSQL_HOST     = "/cloudsql/lingua-audire:us-central1:lingua-audire-mysql"
     MYSQL_UNIX_SOCKET = "/cloudsql/lingua-audire:us-central1:lingua-audire-sql"
     MYSQL_USER     = "root"
-    MYSQL_PASSWORD = "),DpIU5nj5|7$F4y"
+    # set in the Cloud Run service's environment
+    MYSQL_PASSWORD = os.environ.get("MYSQL_PASSWORD")
     MYSQL_DB       = "db"

@@ -15,7 +15,7 @@ class ReportHandler(Resource):
 		cursor = db.connection.cursor()
 
 		# execute the SQL query that will update the row
-		cursor.execute(f"UPDATE clip SET reports = reports + 1 WHERE path = \"{args['path']}\"")
+		cursor.execute("UPDATE clip SET reports = reports + 1 WHERE path = %s", (args['path'],))
 
 		# commit the changes
 		db.connection.commit()

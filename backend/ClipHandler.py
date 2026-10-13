@@ -35,7 +35,7 @@ class ClipHandler(Resource):
 			difficultyUpper = 9999
 
 		try:
-			cursor.execute(f"SELECT * FROM clip WHERE clip.language = \"{language}\" AND clip.difficulty < {difficultyUpper} AND clip.difficulty > {difficultyLower} ORDER BY RAND () LIMIT 1")
+			cursor.execute("SELECT * FROM clip WHERE clip.language = %s AND clip.difficulty < %s AND clip.difficulty > %s ORDER BY RAND () LIMIT 1", (language, difficultyUpper, difficultyLower))
 		except:
 			cursor.close()
 			return
